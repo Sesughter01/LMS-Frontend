@@ -92,21 +92,21 @@ const NavLinks = [
   //   isAccord: false,
   // },
   {
-      name: 'Help & Support',
-      link: '#',
-      icon: iconSupport,
-      _icon: _iconSupport,
-      isAccord: true,
-      items: [
-        {
-            name: 'Support',
-            link: '/support'
-        },
-        {
-            name: 'FAQs',
-            link: '/faqs'
-        }
-      ]
+    name: 'Help & Support',
+    link: '#',
+    icon: iconSupport,
+    _icon: _iconSupport,
+    isAccord: true,
+    items: [
+      {
+        name: 'Support',
+        link: '/support'
+      },
+      {
+        name: 'FAQs',
+        link: '/faqs'
+      }
+    ]
   },
   {
     name: "Logout",
@@ -133,12 +133,12 @@ const SideBar: React.FC<SideBarProps> = ({ logoUrl, secondaryColor }) => {
   const params = useParams();
   const dispatch = useDispatch();
   const router = useRouter();
-  const {dispatch: authDispatch} = useAuth();
+  const { dispatch: authDispatch } = useAuth();
 
   const handleLogOut = async (e: any) => {
-    
+
     e.preventDefault();
-    
+
     // Clear sessionStorage values
     sessionStorage.removeItem("secondaryColor");
     sessionStorage.removeItem("logoUrl");
@@ -164,7 +164,7 @@ const SideBar: React.FC<SideBarProps> = ({ logoUrl, secondaryColor }) => {
       >
         <div className="flex flex-col gap-10">
           {/*<Image src={logoUrl} width={100} height={100} alt="company logo" className="place-self center h-16 w-auto my-4 object-contain mt-8" />*/}
-            <Image
+          <Image
             src="/images/logo.avif"
             width={50}
             height={50}
@@ -173,37 +173,60 @@ const SideBar: React.FC<SideBarProps> = ({ logoUrl, secondaryColor }) => {
           />
           <div className="flex justify-between gap-2 px-4 items-center">
             <div className="flex items-center gap-2">
-              <Image 
-              src={authUser?.profile.avatarImageUrl || imgPrp} 
-              alt="profile image" 
-              className="w-10 aspect-square rounded-full object-cover" 
-              width={100}
-              height={100}
+              <Image
+                src={authUser?.profile.avatarImageUrl || imgPrp}
+                alt="profile image"
+                className="w-10 aspect-square rounded-full object-cover"
+                width={100}
+                height={100}
               />
               <p>
                 {authUser?.profile.firstName} {authUser?.profile.lastName}
               </p>
             </div>
-            <DropdownMenu>
-              {/* Sakirat Edit */}
+            {/* <DropdownMenu>
+              
               <DropdownMenuTrigger>
                 <Button type="button" className="bg-[#2C2884]">
                   <ChevronDownIcon className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end' className='bg-white w-full'>
-                                {/* <DropdownMenuLabel>My Profile</DropdownMenuLabel> */}
-                                <DropdownMenuSeparator />
-                                {/* <DropdownMenuItem className='flex gap-2 pr-24 data-[highlighted]:bg-gray-100 cursor-pointer items-center'><User /> Personal</DropdownMenuItem> */}
-                                {/* <DropdownMenuItem className='flex gap-2 pr-24 data-[highlighted]:bg-gray-100 cursor-pointer items-center'><MapPin /> Address</DropdownMenuItem> */}
-                                {/* <DropdownMenuItem className='flex gap-2 pr-24 data-[highlighted]:bg-gray-100 cursor-pointer items-center'><School /> Education</DropdownMenuItem> */}
-                                <DropdownMenuItem className='flex gap-2 pr-24 data-[highlighted]:bg-gray-100 cursor-pointer items-center'>View Profile</DropdownMenuItem>
-                                <DropdownMenuItem className='flex gap-2 pr-24 data-[highlighted]:bg-gray-100 cursor-pointer items-center'>Payments</DropdownMenuItem>
-                            </DropdownMenuContent>
+                <DropdownMenuLabel>My Profile</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className='flex gap-2 pr-24 data-[highlighted]:bg-gray-100 cursor-pointer items-center'><User /> Personal</DropdownMenuItem>
+                <DropdownMenuItem className='flex gap-2 pr-24 data-[highlighted]:bg-gray-100 cursor-pointer items-center'><MapPin /> Address</DropdownMenuItem>
+                <DropdownMenuItem className='flex gap-2 pr-24 data-[highlighted]:bg-gray-100 cursor-pointer items-center'><School /> Education</DropdownMenuItem>
+                
+              </DropdownMenuContent>
+            </DropdownMenu> */}
+           {/* Added By Shakirat */}
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+              <Button type="button" className="bg-[#2C2884]">
+                  <ChevronDownIcon className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              {/* <DropdownMenuContent align='end' className='bg-white w-full'>
+                                
+                            </DropdownMenuContent> */}
+
+              <DropdownMenuContent align='end' className='bg-white w-full'>
+                {/* <DropdownMenuItem onSelect={handleViewProfile}>View Profile</DropdownMenuItem> */}
+                <DropdownMenuItem >
+                  <Link href="/dashboard/profile">View Profile</Link>
+
+                  {/* <Link href="/dashboard/profile">View Cha</Link> */}
+
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => alert('Payments')}>Payments</DropdownMenuItem>
+              </DropdownMenuContent>
             </DropdownMenu>
+            {/* {isModalOpen && <ProfileModal />} */}
+
           </div>
           <ul className="flex flex-col gap-3 font-medium mr-14">
-            {NavLinks.map(({ name, link, icon, _icon, isAccord,items }) => (
+            {NavLinks.map(({ name, link, icon, _icon, isAccord, items }) => (
               <li key={name}>
                 {isAccord ? (
                   <Accordion type="single" collapsible>
@@ -221,10 +244,10 @@ const SideBar: React.FC<SideBarProps> = ({ logoUrl, secondaryColor }) => {
                       <AccordionContent className="ml-8">
                         {
                           items?.map((item, index) => (
-                              // eslint-disable-next-line react/jsx-key
-                              <Link href={'' + item.link} className='px-6 py-3 flex gap-2 text-sm items-center rounded-full hover:bg-[#28255A]'>
-                                  {item.name}
-                              </Link>
+                            // eslint-disable-next-line react/jsx-key
+                            <Link href={'' + item.link} className='px-6 py-3 flex gap-2 text-sm items-center rounded-full hover:bg-[#28255A]'>
+                              {item.name}
+                            </Link>
                           ))
                         }
                       </AccordionContent>
@@ -240,9 +263,9 @@ const SideBar: React.FC<SideBarProps> = ({ logoUrl, secondaryColor }) => {
                     )}
                   >
                     <Image src={pathname.includes(link) ? _icon : icon}
-                     alt="nav icon" 
-                     className="w-6 h-6" 
-                     /> {name}
+                      alt="nav icon"
+                      className="w-6 h-6"
+                    /> {name}
                   </Link>
                 )}
               </li>
