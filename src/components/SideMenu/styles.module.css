@@ -1,0 +1,25 @@
+.sidemenu {
+  @apply bg-menu h-full  overflow-auto rounded-2xl drop-shadow-3xl;
+}
+
+.menu {
+  @apply grid gap-4 text-white;
+}
+
+.menuItemContent,
+.subMenuButton {
+  @apply flex items-center py-2 px-4 rounded-md  w-full relative overflow-hidden;
+}
+
+.menuItemIcon {
+  @apply mr-3 w-4 h-4;
+}
+
+.menuItem {
+  @apply rounded-md cursor-pointer mb-5 border-0 border-r-0 border-t-4 border-b-4 border-transparent rounded-r-2xl w-3/4 transition-all duration-300;
+}
+
+.menuItem:hover,
+.menuItem.active {
+  @apply text-white  bg-opacity-20 bg-white transition-all border-r-4;
+}

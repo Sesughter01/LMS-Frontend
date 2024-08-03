@@ -1,0 +1,6 @@
+export const UserTypes = {
+  TRAINEE: "TRAINEE",
+  INSTRUCTOR: "INSTRUCTOR",
+  ADMIN: "ADMIN",
+  SUPER_ADMIN: "SUPER_ADMIN",
+};

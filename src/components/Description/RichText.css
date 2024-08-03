@@ -1,0 +1,24 @@
+.contain {
+  position: relative;
+  height: 237px;
+  width: 100%;
+}
+
+.editor {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.editor-input {
+  height: 100%;
+  width: 100%;
+}
+
+.ql-tooltip.ql-editing {
+  left: auto !important;
+}
+
+.quill > .ql-container > .ql-editor.ql-blank::before {
+  @apply font-montserrat text-sm;
+}

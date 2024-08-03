@@ -1,0 +1,38 @@
+.input {
+  @apply w-full border border-[#BABABA] rounded-lg 
+        bg-white px-4 h-10 focus:outline-none font-normal font-montserrat text-[14px];
+
+  &.naked {
+    @apply border-none;
+  }
+
+  &:focus,
+  &.naked:focus {
+    @apply border border-solid border-[#BABABA];
+  }
+
+  &.invalid,
+  &.invalid:focus {
+    @apply border border-solid border-red-500 bg-red-50;
+  }
+
+  &:disabled {
+    @apply bg-gray-100;
+  }
+}
+
+textarea.input {
+  height: 85px;
+  @apply py-2;
+}
+˝ .inputFeedback {
+  @apply text-sm my-1;
+}
+
+.inputFeedbackInvalid {
+  @apply text-red-500 text-xs mt-1;
+}
+
+.label {
+  @apply font-semibold inline-block capitalize text-sm font-montserrat;
+}

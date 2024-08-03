@@ -1,0 +1,51 @@
+export interface Student {
+    id: number,
+    email: string,
+    isEmailVerified: boolean,
+    disabled: boolean,
+    cohortName: string,
+    profile: {
+      firstName: string,
+      lastName: string,
+      phoneNumber: string,
+      gender: string,
+      dateOfBirth: string,
+      avatar: string,
+    },
+    address: {
+      street: string,
+      city: string,
+      state: string,
+      country: string,
+    },
+    education: {
+      institutionName: string,
+      startYear: string,
+      endYear: string,
+      yearOfGraduation: string,
+      certificateObtained: string,
+      courseOfStudy: string,
+    },
+    accountType: string,
+    createdAt: string,
+    updatedAt: string,
+    accessToken: string,
+    userProgrammes: any,
+    // Add other user-related properties here
+  }
+
+  export interface StudentAssessment {
+    id: number,
+    assessmentId: number,
+    assessmentTitle: string,
+    cohortId: number,
+    completionStatus: string,
+    courseId: number,
+    endTimeBoundary: string,
+    createdAt: string,
+    updatedAt: string,
+    isCompleted: boolean,
+    score: any,
+    startTimeBoundary: string,
+    status: string,
+  }

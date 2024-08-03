@@ -1,0 +1,8 @@
+.label {
+  @apply font-semibold leading-[20px] inline-block text-[16px] font-montserrat mb-2;
+}
+
+.label.required::after {
+  content: "*";
+  @apply text-red-500  ml-1;
+}
