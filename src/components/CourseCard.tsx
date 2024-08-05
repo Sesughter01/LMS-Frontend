@@ -1,3 +1,4 @@
+
 import { Course } from '@/shared/types/course'
 import { Book, BookmarkIcon, Clock10Icon } from 'lucide-react'
 import Image from 'next/image'
