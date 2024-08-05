@@ -371,24 +371,7 @@ const Page = () => {
                             </button>
                           </div>
 
-                          <div className="mt-6 flex items-center justify-between gap-x-6">
-                            <div className="flex justify-start">
-                              <button
-                                type="submit"
-                                className="rounded-md bg-secondary px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                              >
-                                Update Info
-                              </button>
-                            </div>
-                            <div className="flex justify-end">
-                              <button
-                                type="button"
-                                className="text-sm font-semibold leading-6 border rounded-lg text-gray-900 px-4 py-2"
-                              >
-                                Cancel
-                              </button>
-                            </div>
-                          </div>
+                          
                         </form>
                       </TabsContent>
                       <TabsContent value="user" className="py-8 px-4">
