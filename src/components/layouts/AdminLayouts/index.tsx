@@ -18,7 +18,7 @@ import Spinner from "../../../../utilComponents/Spinner";
 import Image from "next/image";
 import DashboardService from "@/services/api/dashboard";
 import { Announcement } from "@/shared/types/announcement";
-import { selectUser} from "@/store/slices/authSlice";
+import { selectUser } from "@/store/slices/authSlice";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -27,16 +27,14 @@ const completeIcon = <img src="/icons/adminCard1.svg" alt="check-icon" />;
 const highScore = <img src="/icons/adminCard2.svg" alt="trophy-icon" />;
 const lowScore = <img src="/icons/adminCard3.svg" alt="thumbs-down icon" />;
 
-const AdminLayout = withAdmin(({ children }: any)=> {
-
-
+const AdminLayout = withAdmin(({ children }: any) => {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false); // State to manage menu visibility
   const [isSmallScreen, setIsSmallScreen] = useState(false); // State to manage small screen detection
 
- const openModal = () => {
+  const openModal = () => {
     setModalOpen(true);
   };
   const closeModal = () => {
@@ -65,14 +63,18 @@ const AdminLayout = withAdmin(({ children }: any)=> {
     };
   }, []);
 
-  const adminDashboardData: AdminDashboard | null = useSelector((state: RootState) => state.dashboard.adminDashboard);
+  const adminDashboardData: AdminDashboard | null = useSelector(
+    (state: RootState) => state.dashboard.adminDashboard
+  );
 
   console.log(adminDashboardData, "data");
 
   const logoUrl = sessionStorage.getItem("logoUrl") || "";
   const secondaryColor = sessionStorage.getItem("secondaryColor") || "";
 
-  const [announcementsData, setAnnouncementsData] = useState<Announcement[]>([]);
+  const [announcementsData, setAnnouncementsData] = useState<Announcement[]>(
+    []
+  );
 
   const userDetails = useSelector((state: RootState) => selectUser(state));
 
@@ -80,6 +82,8 @@ const AdminLayout = withAdmin(({ children }: any)=> {
     const fetchAdminDashboard = async () => {
       try {
         await dispatch(getAdminDashboard() as any);
+        // console log here to check the data by Shakirat
+        console.log("Admin Dashboard Data after fetch:", adminDashboardData);
       } catch (error) {
         console.error("Error fetching admin dashboard:", error);
       }
@@ -111,10 +115,32 @@ const AdminLayout = withAdmin(({ children }: any)=> {
     return `${formattedHours}:${minutes} ${ampm}`;
   };
 
+  // const progressCardProps: AdminCardProps[] = [
+  //   { icon: completeIcon, url: "admin/student", text: "Total Enrolments", text2: `${adminDashboardData?.courseEnrollments || 0} Enrolments` },
+  //   { icon: highScore, url: "admin/instructor", text: "Total Instructor", text2: `${adminDashboardData?.instructors || 0} Instructors` },
+  //   { icon: lowScore, url: "admin/course", text: "Total Course", text2: `${adminDashboardData?.courses || 0} Courses` },
+  // ];
+
+  //Shakirat
   const progressCardProps: AdminCardProps[] = [
-    { icon: completeIcon, url: "admin/student", text: "Total Enrolments", text2: `${adminDashboardData?.courseEnrollments || 0} Enrolments` },
-    { icon: highScore, url: "admin/instructor", text: "Total Instructor", text2: `${adminDashboardData?.instructors || 0} Instructors` },
-    { icon: lowScore, url: "admin/course", text: "Total Course", text2: `${adminDashboardData?.courses || 0} Courses` },
+    {
+      icon: completeIcon,
+      url: "admin/student",
+      text: "Total Enrolments",
+      text2: `0 Enrolments`,
+    },
+    {
+      icon: highScore,
+      url: "admin/instructor",
+      text: "Total Instructor",
+      text2: `0 Instructors`,
+    },
+    {
+      icon: lowScore,
+      url: "admin/course",
+      text: "Total Course",
+      text2: `0 Courses`,
+    },
   ];
 
   const generateColors = (numColors: any) => {
@@ -130,7 +156,9 @@ const AdminLayout = withAdmin(({ children }: any)=> {
     // labels: adminDashboardData?.chart.map((entry) => entry.course_name) || [],
     datasets: [
       {
-        data: adminDashboardData?.chart.map((entry) => entry.unique_enrollments) || [],
+        data:
+          adminDashboardData?.chart.map((entry) => entry.unique_enrollments) ||
+          [],
         backgroundColor: generateColors(adminDashboardData?.chart.length || 0),
       },
     ],
@@ -143,7 +171,8 @@ const AdminLayout = withAdmin(({ children }: any)=> {
         callbacks: {
           label: (context: any) => {
             const value = context.formattedValue || "";
-            const courseName = adminDashboardData?.chart[context.dataIndex]?.course_name || "";
+            const courseName =
+              adminDashboardData?.chart[context.dataIndex]?.course_name || "";
             return `${courseName}: ${value}`;
           },
         },
@@ -158,16 +187,36 @@ const AdminLayout = withAdmin(({ children }: any)=> {
         {(isSmallScreen || window.innerWidth <= 1024) && (
           <div className="lg:hidden">
             <button onClick={toggleMenu}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             </button>
           </div>
         )}
 
         {/* Side menu */}
-        <div className={`lg:w-[350px] h-screen flex-shrink-0  ${isSmallScreen ? (isMenuOpen ? "block" : "hidden") : "block"}`}>
-          <SideMenu logoUrl={logoUrl} secondaryColor={secondaryColor} menu={menu} isOpen={false} />
+        <div
+          className={`lg:w-[350px] h-screen flex-shrink-0  ${
+            isSmallScreen ? (isMenuOpen ? "block" : "hidden") : "block"
+          }`}
+        >
+          <SideMenu
+            logoUrl={logoUrl}
+            secondaryColor={secondaryColor}
+            menu={menu}
+            isOpen={false}
+          />
         </div>
 
         <div className="overflow-auto w-full ">
@@ -175,64 +224,151 @@ const AdminLayout = withAdmin(({ children }: any)=> {
           {pathname === "/admin" && (
             <div className="w-full pr-10">
               <div className="space-y-4 p-8">
-                <p style={{ color: secondaryColor }} className="font-semibold text-[25px] text-center lg:text-left">
-                  Welcome, {userDetails?.profile?.firstName? userDetails.profile.firstName :"Admin"}
+                <p
+                  style={{ color: secondaryColor }}
+                  className="font-semibold text-[25px] text-center lg:text-left"
+                >
+                  Welcome,{" "}
+                  {userDetails?.profile?.firstName
+                    ? userDetails.profile.firstName
+                    : "Admin"}
                 </p>
                 <div className="grid grid-cols-3 grid-rows-3 gap-4 ">
-                    
                   <div className="col-span-2  bg-white  custom-scrollbar drop-shadow-lg  border-2 border-gray-200 border-opacity-25 rounded-lg">
                     <div className="p-2 flex flex-col gap-3">
                       <div className="flex items-center justify-between">
-                        <p style={{ color: secondaryColor }} className="font-semibold text-lg">
+                        <p
+                          style={{ color: secondaryColor }}
+                          className="font-semibold text-lg"
+                        >
                           Announcements
                         </p>
-                        <button style={{ borderColor: secondaryColor }} onClick={openModal} className="p-2 rounded border border-opacity-25">
-                          <span style={{ color: secondaryColor }} className="font-medium text-sm">
-                            Add Announcement
+                        <button
+                          style={{ borderColor: secondaryColor }}
+                          onClick={openModal}
+                          className="p-2 rounded border border-opacity-25"
+                        >
+                          <span
+                            style={{ color: secondaryColor }}
+                            className="font-medium text-sm"
+                          >
+                            View Announcements
+                          </span>
+                        </button>
+                        <button
+                          style={{
+                            borderColor: secondaryColor,
+                            backgroundColor: "#1A183E",
+                          }}
+                          onClick={openModal}
+                          className="p-2 rounded border border-opacity-25"
+                        >
+                          <span
+                            style={{ color: "#fff" }}
+                            className="font-medium text-sm"
+                          >
+                            Add Announcements
                           </span>
                         </button>
                       </div>
                       {announcementsData.map((announcement: any) => (
-                        <div key={announcement.id} className="bg-[#F6F6F6] rounded-lg w-full">
+                        <div
+                          key={announcement.id}
+                          className="bg-[#F6F6F6] rounded-lg w-full"
+                        >
                           <div className="flex py-2 items-start justify-between px-4 pb-8">
                             <div className="flex items-center justify-start gap-2">
-                              <Image src={logoUrl} width={30} height={30} alt="Logo" />
+                              <Image
+                                src={logoUrl}
+                                width={30}
+                                height={30}
+                                alt="Logo"
+                              />
                               <div className="flex flex-col">
-                                <span style={{ color: secondaryColor }} className="font-semibold text-[15px]">
+                                <span
+                                  style={{ color: secondaryColor }}
+                                  className="font-semibold text-[15px]"
+                                >
                                   {announcement.title}
                                 </span>
-                                <span className="text-[#808080] text-[12px] font-medium">{announcement.announcement}</span>
+                                <span className="text-[#808080] text-[12px] font-medium">
+                                  {announcement.announcement}
+                                </span>
                               </div>
                             </div>
-                            <span className="text-[#808080] text-[12px] font-medium">{formatTime(announcement.createdAt)}</span>
+                            <span className="text-[#808080] text-[12px] font-medium">
+                              {formatTime(announcement.createdAt)}
+                            </span>
                           </div>
                         </div>
                       ))}
-                      <p>Announcement is not available</p>
-                    </div>
-                  </div>
-
-                  <div className="row-span-2 bg-white p-2 custom-scrollbar drop-shadow-lg border-2 border-gray-200 border-opacity-25 rounded-lg">
-                    <p style={{ color: secondaryColor }} className="font-semibold text-lg text-center lg:text-left">
-                      Recent Activity
-                    </p>
-                  </div>
-                  
-                  {/* <div className="flex  col-span-2 gap-4 "> */}
-                    <div className="flex flex-col gap-4">
-                      {progressCardProps.map((props, index) => (
-                        <AdminCard key={index} {...props} />
-                      ))}
-                    </div>
-
-                    <div className="bg-white drop-shadow-lg border-2 border-gray-200 border-opacity-25 rounded-lg">
-                        <p style={{ color: secondaryColor }} className="px-4 font-semibold text-lg">
-                          Enrollment Distribution
+                      <div className="px-14 py-14">
+                        <h3
+                          style={{ color: secondaryColor }}
+                          className="font-semibold text-lg text-center lg:text-left"
+                        >
+                          There is no announcement yet
+                        </h3>
+                        <p>
+                          Click on the “add announcement” button to create your
+                          first announcement
                         </p>
-                        <div className="w-[150px] h-[150px] py-4 mx-auto flex items-center justify-center">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row-span-2 bg-white p-2 custom-scrollbar drop-shadow-lg border-2 border-gray-200 border-opacity-25 rounded-lg grid">
+                    <div>
+                      <h3
+                        style={{ color: secondaryColor }}
+                        className="font-semibold text-lg text-center lg:text-left"
+                      >
+                        Recent Learner Activity
+                      </h3>
+                    </div>
+                    <div>
+                      <h3
+                        style={{ color: secondaryColor }}
+                        className="font-semibold text-lg text-center lg:text-left"
+                      >
+                        There are no recent activities yet.
+                      </h3>
+                      <p>
+                        Once students start enrolling and completing
+                        assessments, the activities will appear here.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* <div className="flex  col-span-2 gap-4 "> */}
+                  <div className="flex flex-col gap-4">
+                    {progressCardProps.map((props, index) => (
+                      <AdminCard key={index} {...props} />
+                    ))}
+                  </div>
+
+                  <div className="grid bg-white drop-shadow-lg border-2 border-gray-200 border-opacity-25 rounded-lg">
+                    <p
+                      style={{ color: secondaryColor }}
+                      className="px-4 font-semibold text-lg"
+                    >
+                      Enrollment Distribution
+                    </p>
+                    {/* <div className="w-[150px] h-[150px] py-4 mx-auto flex items-center justify-center">
                           <Pie data={chartData} options={chartOptions as any} />
-                        </div>
-                        <div className="flex px-4 flex-col gap-3">
+                        </div> */}
+                    <div className="">
+                      <h3
+                        style={{ color: secondaryColor }}
+                        className="px-4 font-semibold text-lg"
+                      >
+                        There is no enrollment data yet.
+                      </h3>
+                      <p className="text-sm">
+                        Once you’re assigned a course it will appear here.
+                      </p>
+                    </div>
+                    {/* <div className="flex px-4 flex-col gap-3">
                           {adminDashboardData?.chart.map((entry, index) => (
                             <div key={index} className="flex items-center gap-2">
                               <div style={{ width: "10px", height: "10px", backgroundColor: chartData.datasets[0].backgroundColor[index] }}></div>
@@ -241,17 +377,59 @@ const AdminLayout = withAdmin(({ children }: any)=> {
                               </p>
                             </div>
                           ))}
-                        </div>
-                    </div>
-              
-              
+                        </div> */}
+                  </div>
+
                   {/* </div> */}
                 </div>
               </div>
             </div>
           )}
+          <div
+            style={{
+              borderColor: secondaryColor,
+              backgroundColor: "#1A183E",
+            }}
+            className="flex justify-around"
+          >
+            <div className="px-10 py-14">
+              <h3 style={{ color: "#fff" }} className=" font-semibold text-lg">
+                Empower Your Students With New Skills
+              </h3>
+              <p className="py-4 text-sm" style={{ color: "#fff" }}>
+                Share Your Knowledge and Expertise with Students.
+              </p>
+              <button
+                onClick={openModal}
+                className="p-2 rounded border border-white border-opacity-25 "
+              >
+                <span style={{ color: "#fff" }} className="font-medium text-sm">
+                  + Add new Courses
+                </span>
+              </button>
+            </div>
+            <div className="p-4">
+              <img
+                src="https://s3-alpha-sig.figma.com/img/edc7/3002/4144f69c7f89706e74931e94cf472c20?Expires=1724025600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=fux-8S6X8LtMgkVTKC5X55X-0RSrU6ZQ8FCnsHfwNSijiU0CJE4FDk39SSmZoGs~YQcAKX1xjJnjwFsRgVLR4sr0zYZMJc-H~ZdbiqZiVxsedu2B-RC2ERC0OJ8EqJoplERURf9nAU7yO1HtLJw12tuXYx-70c5~kJ2UyeXWa6PUhOr4yPuEhGMIreLoYjFFWMLl2jC3Yi7W08kh66fIPSCJBG1tbIADRPRtQrh6HYeK6VKWlzAVJu~Ww7vKfNYiejhMwBJbfGlUMAu3flFXDBb6vRcovOMfIFrsgsJ8cmF-Em1WunIviSKnOtzyzC6g9inO3g0iQzy8cy~UP3jjSw__"
+                alt="Description of image"
+                className="w-full h-auto"
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  // position: "absolute",
+                  // top: "-73px",
+                  // left: "844.42px",
+                  transform: "rotate(360deg) scaleX(-1)",
+                }}
+              />
+            </div>
+          </div>
         </div>
-        <AnnouncementModal isOpen={isModalOpen} onClose={closeModal} secondaryColor={secondaryColor} />
+        <AnnouncementModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          secondaryColor={secondaryColor}
+        />
       </div>
     </div>
   );
