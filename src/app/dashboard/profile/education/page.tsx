@@ -22,12 +22,18 @@ const Page = () => {
         <DashNav secondaryColor={secondaryColor} currentPage={""} />
         <section className="grow px-6 lg:px-8 flex flex-col gap-8">
           <article className="lg:w-2/3">
-            <h2 className="text-2xl font-semibold leading-7 text-gray-900 mb-10">Edit Profile</h2>
+            <h2 className="text-2xl font-semibold leading-7 text-gray-900 mb-10">
+              Edit Profile
+            </h2>
             <form>
               <section className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                 <div className="col-span-3">
-                  <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
-                    Highest Qualification <span className="text-primary">*</span>
+                  <label
+                    htmlFor="street-address"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Highest Qualification{" "}
+                    <span className="text-primary">*</span>
                   </label>
                   <div className="mt-2">
                     <input
@@ -41,7 +47,10 @@ const Page = () => {
                 </div>
 
                 <div className="col-span-3 ">
-                  <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label
+                    htmlFor="city"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
                     Year of Graduation <span className="text-primary">*</span>
                   </label>
                   <div className="mt-2">
@@ -56,7 +65,10 @@ const Page = () => {
                 </div>
 
                 <div className="col-span-3 sm:col-start-1">
-                  <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label
+                    htmlFor="city"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
                     Institution name <span className="text-primary">*</span>
                   </label>
                   <div className="mt-2">
@@ -71,7 +83,10 @@ const Page = () => {
                 </div>
 
                 <div className="col-span-3">
-                  <label htmlFor="region" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label
+                    htmlFor="region"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
                     Course of Study <span className="text-primary">*</span>
                   </label>
                   <div className="mt-2">
@@ -87,13 +102,21 @@ const Page = () => {
               </section>
               <section className="flex flex-col gap-6 mt-6">
                 <div className="col-span-full">
-                  <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label
+                    htmlFor="cover-photo"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
                     Degree certificate <span className="text-primary">*</span>
                   </label>
                   <div className="mt-2 flex rounded-lg border border-dashed border-gray-900/25 py-4 px-4 flex-col gap-4 ">
                     <div className="flex items-center gap-2">
-                      <PhotoIcon className=" h-12 w-12 text-gray-300" aria-hidden="true" />
-                      <p className="font-medium leading-5 text-gray-600">Upload Pdf, jpg, jpeg, png files only. Max file size 2MB</p>
+                      <PhotoIcon
+                        className=" h-12 w-12 text-gray-300"
+                        aria-hidden="true"
+                      />
+                      <p className="font-medium leading-5 text-gray-600">
+                        Upload Pdf, jpg, jpeg, png files only. Max file size 2MB
+                      </p>
                     </div>
                     <div className="flex justify-between items-center rounded-md border border-gray-200 px-4 p-2">
                       <input
@@ -105,26 +128,48 @@ const Page = () => {
                                                                             file:bg-violet-50 file:text-indigo-700
                                                                             hover:file:bg-violet-100 cursor-pointer"
                       />
-                      <Button type="button" className="bg-red-100 text-red-700 p-2 rounded-md">
+                      <Button
+                        type="button"
+                        className="bg-red-100 text-red-700 p-2 rounded-md"
+                      >
                         <TrashIcon className="w-4 h-4 " />
                       </Button>
                     </div>
                   </div>
                 </div>
 
-                <Button type="button" variant={"outline"} className="hover:bg-gray-100 w-fit flex gap-2 items-center">
+                <Button
+                  type="button"
+                  variant={"outline"}
+                  className="hover:bg-gray-100 w-fit flex gap-2 items-center"
+                >
                   <PlusIcon className="w-5 h-5" />
                   Add another educational background
                 </Button>
               </section>
 
-              <div className="mt-12 flex items-center justify-end gap-x-6">
+              {/* <div className="mt-12 flex items-center justify-end gap-x-6">
                 <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
                   Cancel
                 </button>
                 <button
                   type="submit"
                   className="rounded-md bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Update Info
+                </button>
+              </div> */}
+              {/* Added by Shakirat */}
+              <div className="mt-6 flex items-center justify-start gap-x-6">
+                <button
+                  type="button"
+                  className="text-sm font-semibold leading-6 border rounded-lg text-gray-900 px-4 py-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-md bg-secondary px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Update Info
                 </button>
