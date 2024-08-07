@@ -248,7 +248,7 @@ const Page = () => {
                <AnimatePresence>
                   {displayedCourses && displayedCourses.filter(item => item.IsUserEnrolled).length ? (
                     displayedCourses
-                      .filter(item => item.IsUserEnrolled)
+                      // .filter(item => item.IsUserEnrolled)
                       .map((singleCourse, index) => (
                         <motion.li
                           key={index}

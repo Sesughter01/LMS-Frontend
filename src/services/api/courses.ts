@@ -219,6 +219,17 @@ export default class courseService {
     const response = await ApiRequestClient.get(url);
     return response.data;
   }
+
+  static async GetUserCourseDetails(
+    userId: number
+  ): Promise<CourseDetail> {
+    // let url = `/api/v1/courses/${userId}`;
+    let url = `/api/v1/trainees/${userId}/enrollments`;
+    // trainees/{traineeUserId}/enrollments’
+    const response = await ApiRequestClient.get(url);
+    console.log("RESPONSE DATA" , response.data)
+    return response.data;
+  }
 }
 
 

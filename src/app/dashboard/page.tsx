@@ -62,10 +62,12 @@ import courseService from "@/services/api/courses";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import { motion, AnimatePresence } from "framer-motion";
+// import CourseCard from "@/components/CourseCard";
+import UserCourseCard from "@/components/UserCourseCard";
 
-type size = number
-
-export const CircularProgress = ({ size, progress , strokeWidth }) => {
+type size = number;
+// 
+export const CircularProgress = ({size ,progress,strokeWidth }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (progress / 100) * circumference;
@@ -119,8 +121,22 @@ export const CircularProgress = ({ size, progress , strokeWidth }) => {
   );
 };
 
+const fadeInAnimationVariants = {
+  initial: { y: 100, opacity: 0 },
+  animate: (index: number) => ({
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.25, ease: "easeInOut", delay: index * 0.05 },
+  }),
+  exit: (index: number) => ({
+    y: 100,
+    opacity: 0,
+    transition: { duration: 0.25, ease: "easeInOut", delay: index * 0.05 },
+  }),
+};
+
 const Page = () => {
-  const [progress, setProgress] = useState(1); // Example progress value
+  const [progress, setProgress] = useState(0); // Example progress value
   const authUser = useSelector((state: RootState) => state.auth.user);
 
   // console.log("Authsuser********", authUser)
@@ -153,6 +169,7 @@ const Page = () => {
   const [changeCourseState, setChangeCourseState] = useState(false);
     const [cohortStartDate, setCohortStartDate] = useState<null | string>(null);
     const [modalOpen, setModalOpen] = useState(false)
+  const [userCourses, setUserCourses] = useState<Course[]>();
 
   console.log("recentApplication:", mostRecentApplication);
   console.log("id:", cohortPreAssessment);
@@ -219,8 +236,33 @@ const Page = () => {
         mostRecentApplication?.cohortId
       );
 
-      console.log("coursesssssssssssssssss", courses)
-      setAvailableCourses(courses.results);
+      console.log("coursesssssssssssssssss", courses);
+      setAvailableCourses(courses.results );
+    }
+  };
+
+
+  const fetchUserCourses = async () => {
+    try{
+        const userCourseId = sessionStorage.getItem("userCourseId")
+        if(!userCourseId){
+          toast.info("User has no current course")
+          setUserCourses([]);
+        }else{
+          // let courses = await courseService.GetAllAvailableCoursesInProgramme(defaultProgramme?.id, mostRecentApplication?.cohortId);
+        // console.log("couresewwwwwwwwwwwwwwwwwww", courses.results)
+          let courses = await courseService.GetIndividualCourseDetails(Number(userCourseId));
+
+          console.log("mineeeeeeeeeeeeee", courses)
+
+          // setCourses([courses]);
+          setUserCourses([courses]);
+          // setUserCourses([courses]);
+        }
+        
+    }catch(err){
+      toast.error(err.message)
+        console.log('errorr', err)
     }
   };
 
@@ -331,7 +373,8 @@ const Page = () => {
   //     score to be eligible for free course enrollment.</p>
 
   useEffect(() => {
-    fetchAndSetMostRecentApplication();
+    // fetchAndSetMostRecentApplication();
+    fetchUserCourses();
   }, []);
 
   useEffect(() => {
@@ -436,7 +479,7 @@ const Page = () => {
             <div className="flex flex-col  row-span-3 bg-white p-4 rounded w-full shadow-md gap-4">
               <h2 className="text-lg font-semibold">Progress Summary</h2>
               <div className="flex items-center mt-4 gap-4">
-                {/* <CircularProgress size={100} progress={progress} strokeWidth={10} /> */}
+                <CircularProgress size={100} progress={progress} strokeWidth={10} />
                 {/* <div className="relative">
                   <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center">
                     <span className="text-xl font-semibold">0%</span>
@@ -499,13 +542,78 @@ const Page = () => {
             {/* Courses */}
             <div className="row-span-3 p-6  w-full mx-auto bg-white rounded-xl shadow-md space-y-4">
               <h2 className="text-xl font-semibold text-gray-900">Courses</h2>
-              <div className="flex flex-col justify-center items-center p-2">
-                <p className="text-gray-600 text-center">You are yet to enroll in a course</p>
-                <p className="text-gray-400 text-center">Discover endless learning possibilities. Enroll now, explore courses!</p>
-              </div>
-              <div className="flex justify-center">
-                <button className="mt-4 px-4 py-2 text-white rounded" style={{ background:"#1A183E" }}>See Courses</button>
-              </div>
+              
+
+
+              <ul className="w-full gap-4">
+               <AnimatePresence>
+                  {userCourses && userCourses.filter(item => item.IsUserEnrolled).length ? (
+                    userCourses
+                      .filter(item => item.IsUserEnrolled)
+                      .map((singleCourse, index) => (
+                        <motion.li
+                          key={index}
+                          variants={fadeInAnimationVariants}
+                          initial="initial"
+                          whileInView="animate"
+                          exit="exit"
+                          viewport={{
+                            once: true,
+                          }}
+                          custom={index}
+                          className="flex w-full h-full"
+                        >
+                          <UserCourseCard key={singleCourse.id} {...singleCourse} />
+                        </motion.li>
+                      ))
+                  ) : (
+                    // <div className="w-full">
+                    //   <div className="flex flex-col justify-center items-center p-2">
+                    //     <p className="text-gray-600 text-center">You are yet to enroll in a course</p>
+                    //     <p className="text-gray-400 text-center">Discover endless learning possibilities. Enroll now, explore courses!</p>
+                    //   </div>
+                    //   <div className="flex justify-center">
+                    //     <button className="mt-4 px-4 py-2 text-white rounded" style={{ background:"#1A183E" }}>See Courses</button>
+                    //   </div>
+                    // </div>
+
+                    <div className="overflow-hidden  w-full">
+                      <div className="md:flex">
+                          <div className="md:flex-shrink-0">
+                          {/* <img className="h-48 w-full object-cover md:h-full md:w-48" src="path/to/your/image.jpg" alt="Course" /> */}
+                          </div>
+                          <div className="w-full">
+                            <div className="md:flex-shrink-0 flex gap-2">
+                              <img className="h-40 w-full object-cover md:h-full md:w-40" src="path/to/your/image.jpg" alt="Course" />
+                              <div className="md:flex-shrink-0">
+                                <h1 className="block mt-1  text-400 leading-tight font-bold text-black">Java and Spring Boot</h1>
+                                <p className="mt-2 text-sm text-gray-500">Davidson Adepoju</p>
+                                <p className="mt-2 text-sm text-gray-500">Tue/Thur 14:00 - 18:00</p>
+                              </div>
+                            </div>
+                           
+                            <ul className="mt-4 text-gray-700 ">
+                                <li className='flex items-center  text-sm text-gray-200 mb-1'><span className="inline-block w-1 h-1 bg-pink-500 mr-2"></span> Robust Backend Development</li>
+                                <li className='flex items-center  text-sm text-gray-200 mb-1'><span className="inline-block w-1 h-1 bg-pink-500 mr-2"></span> RESTful API Creation</li>
+                                <li className='flex items-center  text-sm text-gray-200 mb-1'><span className="inline-block w-1 h-1 bg-pink-500 mr-2"></span> Deployment and Scalability</li>
+                                <li className='flex items-center  text-sm text-gray-200 mb-1'><span className="inline-block w-1 h-1 bg-pink-500 mr-2"></span> Database Integration Proficiency</li>
+                                <li className='flex items-center  text-sm text-gray-200 mb-1'><span className="inline-block w-1 h-1 bg-pink-500 mr-2"></span> Server-Side Framework Mastery</li>
+                            </ul>
+                            <div className="mt-4 flex items-center">
+                                <span className="inline-block text-pink-500 rounded-full px-3 py-1 text-sm font-semibold mr-2">12 Modules</span>
+                                <span className="inline-block text-pink-500 rounded-full px-3 py-1 text-sm font-semibold">264 hours</span>
+                            </div>
+                            <div className="mt-6 flex justify-end items-end">
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ background:"#1A183E" }}>
+                                  Continue Lesson
+                                </button>
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                  )}
+                </AnimatePresence>
+                </ul>
             </div>
 
             {/* Upcoming Assessment */}
@@ -549,5 +657,7 @@ export const AssessmentLoader = () => {
     </div>
   );
 };
+
+
 
 export default Page;
