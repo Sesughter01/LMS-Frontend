@@ -6,6 +6,7 @@ import { logoutUser } from "@/store/slices/authSlice";
 import { useAuth } from "../../../context/AuthContext";
 import { deleteCookie } from 'cookies-next';
 import Image from "next/image";
+import { IoPersonCircleSharp } from "react-icons/io5";
 
 export type MenuItem = {
   label: string;
@@ -79,8 +80,14 @@ const SideMenu: React.FC<SideMenuProps> = ({ menu, logoUrl, secondaryColor, isOp
 
 
   return (
-    <div style={{  backgroundColor: secondaryColor, position: 'fixed', width: '20vw',  overflow: 'auto' }} className={`${styles.sidemenu} ${isOpen ? styles.open : ""}`}>
-      <div className={`flex w-full mb-5 items-center justify-center`}>
+    <div style={{ 
+       backgroundColor: secondaryColor,
+       width: '20vw',
+       height: '100dvh',
+       display: 'flex',
+       flexDirection: 'column',
+       }} className={`${styles.sidemenu} ${isOpen ? styles.open : ""}`}>
+      <div className={`flex w-full mb-5 items-center justify-center overflow-hidden`}>
         <Link href="/">
           {/*<img src={logoUrl} className="w-40 pt-5" alt="logo" />*/}
              <Image
@@ -94,10 +101,11 @@ const SideMenu: React.FC<SideMenuProps> = ({ menu, logoUrl, secondaryColor, isOp
       </div>
       <div className={`flex justify-between items-center px-6 py-6`}>
         <div className="flex items-center gap-2">
+          <IoPersonCircleSharp className="text-white text-3xl" />
           <p className="text-white text-base font-medium">Admin</p>
         </div>
       </div>
-      <nav className="mt-5">
+      <nav className="mt-5 flex-grow overflow-hidden">
         <Menu items={updatedMenu} />
       </nav>
       <p className={`text-sm text-white text-center font-medium pb-5 bg-${secondaryColor}`}>

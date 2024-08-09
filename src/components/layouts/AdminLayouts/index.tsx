@@ -19,6 +19,9 @@ import Image from "next/image";
 import DashboardService from "@/services/api/dashboard";
 import { Announcement } from "@/shared/types/announcement";
 import { selectUser } from "@/store/slices/authSlice";
+import { IoIosNotifications } from "react-icons/io";
+
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -181,7 +184,7 @@ const AdminLayout = withAdmin(({ children }: any) => {
   };
 
   return (
-    <div className="h-screen">
+    <div className="min-h-screen ">
       <div className="overflow-hidden flex flex-col lg:flex-row bg-white py-5 px-5 gap-10">
         {/* Hamburger icon for small and medium screens */}
         {(isSmallScreen || window.innerWidth <= 1024) && (
@@ -219,57 +222,64 @@ const AdminLayout = withAdmin(({ children }: any) => {
           />
         </div>
 
-        <div className="overflow-auto w-full ">
+        <div className="overflow-hidden w-full ">
           <div className="relative">{children}</div>
           {pathname === "/admin" && (
             <div className="w-full pr-10">
-              <div className="space-y-4 p-8">
-                <p
-                  style={{ color: secondaryColor }}
-                  className="font-semibold text-[25px] text-center lg:text-left"
-                >
-                  Welcome,{" "}
-                  {userDetails?.profile?.firstName
-                    ? userDetails.profile.firstName
-                    : "Admin"}
-                </p>
-                <div className="grid grid-cols-3 grid-rows-3 gap-4 ">
-                  <div className="col-span-2  bg-white  custom-scrollbar drop-shadow-lg  border-2 border-gray-200 border-opacity-25 rounded-lg">
+              <div className="">
+                <div className="flex justify-between px-4">
+                  <p
+                    style={{ color: secondaryColor }}
+                    className="font-bold text-2xl text-center lg:text-left lg:px-8"
+                  >
+                    Welcome,{" "}
+                    {userDetails?.profile?.firstName
+                      ? userDetails.profile.firstName
+                      : "Admin"}
+                  </p>
+                  <p className="text-3xl lg:pr-8">
+                    <IoIosNotifications/>
+                  </p>
+                </div>
+                <div className=" p-12 grid grid-cols-3 gap-4">
+                  <div className="col-span-2 bg-white drop-shadow-lg  border-2 border-gray-200 border-opacity-25 rounded-lg">
                     <div className="p-2 flex flex-col gap-3">
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center p-4 justify-between">
                         <p
                           style={{ color: secondaryColor }}
-                          className="font-semibold text-lg"
+                          className="font-bold text-lg"
                         >
                           Announcements
                         </p>
-                        <button
-                          style={{ borderColor: secondaryColor }}
-                          onClick={openModal}
-                          className="p-2 rounded border border-opacity-25"
-                        >
-                          <span
-                            style={{ color: secondaryColor }}
-                            className="font-medium text-sm"
+                        <div className="space-x-4">
+                          <button
+                            style={{ borderColor: secondaryColor }}
+                            onClick={openModal}
+                            className="p-1.5 rounded border border-opacity-25"
                           >
-                            View Announcements
-                          </span>
-                        </button>
-                        <button
-                          style={{
-                            borderColor: secondaryColor,
-                            backgroundColor: "#1A183E",
-                          }}
-                          onClick={openModal}
-                          className="p-2 rounded border border-opacity-25"
-                        >
-                          <span
-                            style={{ color: "#fff" }}
-                            className="font-medium text-sm"
+                            <span
+                              style={{ color: secondaryColor }}
+                              className="font-medium text-[12px]"
+                            >
+                              View Announcements
+                            </span>
+                          </button>
+                          <button
+                            style={{
+                              borderColor: secondaryColor,
+                              backgroundColor: "#1A183E",
+                            }}
+                            onClick={openModal}
+                            className="p-1.5 rounded border border-opacity-25"
                           >
-                            Add Announcements
-                          </span>
-                        </button>
+                            <span
+                              style={{ color: "#fff" }}
+                              className="font-medium text-sm"
+                            >
+                              Add Announcements
+                            </span>
+                          </button>
+                        </div>
                       </div>
                       {announcementsData.map((announcement: any) => (
                         <div
@@ -302,22 +312,22 @@ const AdminLayout = withAdmin(({ children }: any) => {
                           </div>
                         </div>
                       ))}
-                      <div className="px-14 py-14">
+                      <div className="p-10 flex flex-col items-center justify-center text-center">
                         <h3
                           style={{ color: secondaryColor }}
-                          className="font-semibold text-lg text-center lg:text-left"
+                          className="font-semibold text-lg"
                         >
-                          There is no announcement yet
+                          There is no  <br />announcement yet
                         </h3>
                         <p>
-                          Click on the “add announcement” button to create your
+                          Click on the “add announcement” button to  <br />create your
                           first announcement
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="row-span-2 bg-white p-2 custom-scrollbar drop-shadow-lg border-2 border-gray-200 border-opacity-25 rounded-lg grid">
+                  <div className="row-span-2 bg-white p-4 custom-scrollbar drop-shadow-lg border-2 border-gray-200 border-opacity-25 rounded-lg grid">
                     <div>
                       <h3
                         style={{ color: secondaryColor }}
@@ -326,10 +336,10 @@ const AdminLayout = withAdmin(({ children }: any) => {
                         Recent Learner Activity
                       </h3>
                     </div>
-                    <div>
+                    <div className="flex flex-col text-center">
                       <h3
                         style={{ color: secondaryColor }}
-                        className="font-semibold text-lg text-center lg:text-left"
+                        className="font-semibold text-[16px] text-center"
                       >
                         There are no recent activities yet.
                       </h3>
@@ -360,12 +370,12 @@ const AdminLayout = withAdmin(({ children }: any) => {
                     <div className="">
                       <h3
                         style={{ color: secondaryColor }}
-                        className="px-4 font-semibold text-lg"
+                        className="px-4 font-semibold text-lg text-center"
                       >
-                        There is no enrollment data yet.
+                        There is no enrollment <br /> data yet.
                       </h3>
-                      <p className="text-sm">
-                        Once you’re assigned a course it will appear here.
+                      <p className="text-sm text-center">
+                        Once you’re assigned a course it will <br /> appear here.
                       </p>
                     </div>
                     {/* <div className="flex px-4 flex-col gap-3">
@@ -389,26 +399,34 @@ const AdminLayout = withAdmin(({ children }: any) => {
             style={{
               borderColor: secondaryColor,
               backgroundColor: "#1A183E",
+              borderRadius: '8px',
+              width: '1350px',
+              marginLeft: '38px',
+              marginTop: '0.5px',
+              height: '180px',
+              padding:'4px'
+              
+              
             }}
-            className="flex justify-around"
+            className="flex justify-between"
           >
-            <div className="px-10 py-14">
+            <div className="px-10 py-6">
               <h3 style={{ color: "#fff" }} className=" font-semibold text-lg">
                 Empower Your Students With New Skills
               </h3>
-              <p className="py-4 text-sm" style={{ color: "#fff" }}>
+              <p className="py-4 text-lg" style={{ color: "#fff" }}>
                 Share Your Knowledge and Expertise with Students.
               </p>
               <button
                 onClick={openModal}
-                className="p-2 rounded border border-white border-opacity-25 "
+                className="p-2 rounded border-2 border-white border-opacity-25 "
               >
                 <span style={{ color: "#fff" }} className="font-medium text-sm">
                   + Add new Courses
                 </span>
               </button>
             </div>
-            <div className="p-4">
+            <div className="pr-32 py-0">
               <img
                 src="https://s3-alpha-sig.figma.com/img/edc7/3002/4144f69c7f89706e74931e94cf472c20?Expires=1724025600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=fux-8S6X8LtMgkVTKC5X55X-0RSrU6ZQ8FCnsHfwNSijiU0CJE4FDk39SSmZoGs~YQcAKX1xjJnjwFsRgVLR4sr0zYZMJc-H~ZdbiqZiVxsedu2B-RC2ERC0OJ8EqJoplERURf9nAU7yO1HtLJw12tuXYx-70c5~kJ2UyeXWa6PUhOr4yPuEhGMIreLoYjFFWMLl2jC3Yi7W08kh66fIPSCJBG1tbIADRPRtQrh6HYeK6VKWlzAVJu~Ww7vKfNYiejhMwBJbfGlUMAu3flFXDBb6vRcovOMfIFrsgsJ8cmF-Em1WunIviSKnOtzyzC6g9inO3g0iQzy8cy~UP3jjSw__"
                 alt="Description of image"
