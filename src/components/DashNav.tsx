@@ -118,12 +118,7 @@ const DashNav: React.FC<DashNavProps> = ({ currentPage, secondaryColor }) => {
                     <Accordion type="single" collapsible>
                       <AccordionItem value="item-1" className="border-0">
                         <AccordionTrigger
-                          className={classNames(
-                            "hover:no-underline px-6 py-3 hover:bg-[#28255A]",
-                            pathname.includes(link) &&
-                              "bg-[#28255A] font-medium text-white"
-                          )}
-                        >
+                          className={classNames("hover:no-underline px-6 py-3 hover:bg-[#28255A]", pathname.includes(link) && "bg-[#28255A] font-medium text-white")}>
                           <div className="flex gap-2 text-sm items-center">
                             <Image
                               src={pathname.includes(link) ? _icon : icon}

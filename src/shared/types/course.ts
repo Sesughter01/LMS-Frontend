@@ -4,7 +4,8 @@ export interface Course {
   coursePrice?: any;
   courseDescription: string;
   courseListingImageReferenceId: string;
-  image: string;
+  // image: string;
+  courseImage : string;
   cohortId: number;
   programmeId: number;
   cohortName: string;

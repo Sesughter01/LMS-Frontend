@@ -115,7 +115,8 @@ const Page = () => {
         }else{
           // let courses = await courseService.GetAllAvailableCoursesInProgramme(defaultProgramme?.id, mostRecentApplication?.cohortId);
         // console.log("couresewwwwwwwwwwwwwwwwwww", courses.results)
-          let courses = await courseService.GetIndividualCourseDetails(Number(userCourseId));
+          // let courses = await courseService.GetIndividualCourseDetails(Number(userCourseId));
+          let courses = await courseService.GetUserCourseDetails(Number(authUser?.id));
 
           console.log("mineeeeeeeeeeeeee", courses)
 
@@ -218,7 +219,7 @@ const Page = () => {
               <TabsContent value={"all"} className="py-8 ">
                 <ul className="grid lg:grid-cols-2 w-full gap-4">
                   <AnimatePresence>
-                    {displayedCourses &&
+                    {/* {displayedCourses &&
                       displayedCourses.map((singleCourse, index) => {
                         return (
                           <motion.li
@@ -236,7 +237,31 @@ const Page = () => {
                             <CourseCard key={singleCourse.id} {...singleCourse} />
                           </motion.li>
                         );
-                      })}
+                      })} */}
+
+                      
+                  {displayedCourses && displayedCourses.filter(item => item.IsUserEnrolled).length ? (
+                    displayedCourses
+                      .filter(item => item.IsUserEnrolled)
+                      .map((singleCourse, index) => (
+                        <motion.li
+                          key={index}
+                          variants={fadeInAnimationVariants}
+                          initial="initial"
+                          whileInView="animate"
+                          exit="exit"
+                          viewport={{
+                            once: true,
+                          }}
+                          custom={index}
+                          className="flex w-full h-full"
+                        >
+                          <CourseCard key={singleCourse.id} {...singleCourse} />
+                        </motion.li>
+                      ))
+                  ) : (
+                    <p>No courses yet.</p>
+                  )}
                   </AnimatePresence>
                   
                 </ul>
@@ -246,9 +271,29 @@ const Page = () => {
                <TabsContent value={"mine"} className="py-8 ">
                 <ul className="grid lg:grid-cols-2 w-full gap-4">
                <AnimatePresence>
-                  {displayedCourses && displayedCourses.filter(item => item.IsUserEnrolled).length ? (
+                  {/* {displayedCourses && displayedCourses.filter(item => item.IsUserEnrolled).length ? (
                     displayedCourses
+                      .filter(item => item.IsUserEnrolled)
+                      .map((singleCourse, index) => (
+                        <motion.li
+                          key={index}
+                          variants={fadeInAnimationVariants}
+                          initial="initial"
+                          whileInView="animate"
+                          exit="exit"
+                          viewport={{
+                            once: true,
+                          }}
+                          custom={index}
+                          className="flex w-full h-full"
+                        >
+                          <CourseCard key={singleCourse.id} {...singleCourse} />
+                        </motion.li>
+                      )) */}
+                      {userCourses  ? (
+                        userCourses
                       // .filter(item => item.IsUserEnrolled)
+                      // .filter(item => item.isEnrolled)
                       .map((singleCourse, index) => (
                         <motion.li
                           key={index}
