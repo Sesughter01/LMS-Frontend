@@ -545,7 +545,7 @@ const Page = () => {
               
 
               <div className="max-h-[200px] overflow-x-auto " style={{maxHeight:'inherit'}}>
-                <ul className="w-full min-h-[1000px] h-full">
+                <ul className="w-full min-h-[100px] h-full">
                   <AnimatePresence>
                       {userCourses && userCourses.filter(item => item.IsUserEnrolled).length ? (
                         userCourses
