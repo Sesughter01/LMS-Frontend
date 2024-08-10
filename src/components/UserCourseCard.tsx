@@ -74,13 +74,13 @@ const UserCourseCard: React.FC<Course> = (course) => {
                                 </div>
                             </div>
                             <ul className="mt-4">
-                                <li className='flex items-center  text-[12px]  mb-1'><span className="inline-block w-1 h-1 bg-pink-500 mr-2"></span>{course.courseDescription}</li>
+                                <li className='flex items-center  text-[12px]  mb-1'><span className="inline-block w-2 h-2 bg-pink-500 mr-1"></span>{course.courseDescription}</li>
                             </ul>
                             <div className='flex gap-4 items-left flex items-center'>
                                 <p className="flex items-center  text-[12px] "><Book className='text-primary h-4' /> 12 Modules</p>
                                 <p className="flex items-center gap-1 text-[12px] "><Clock10Icon className='text-primary h-4' /> 200 hrs 45 mins</p>
                             </div>
-                            <div className="flex w-full item-end justify-end py-4 ">
+                            <div className="flex w-full item-end justify-end py-4 pt-7">
                                 <button className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer" style={{ background:"#1A183E" }}  onClick={() => router.push(pathname + "/" + course.id)}>
                                   Continue Lesson
                                 </button>

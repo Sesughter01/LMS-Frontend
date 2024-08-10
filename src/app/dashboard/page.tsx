@@ -540,12 +540,12 @@ const Page = () => {
             </div>
 
             {/* Courses */}
-            <div className="row-span-3 p-4  w-full mx-auto bg-white rounded-xl shadow-md space-y-4 overflow-x-auto ">
+            <div className="row-span-3 p-4  w-full mx-auto bg-white rounded-xl shadow-md space-y-4 overflow-hidden ">
               <h2 className="text-xl font-semibold text-gray-900">Courses</h2>
               
 
-              <div className="max-h-[200px] overflow-x-auto " style={{maxHeight:'inherit'}}>
-                <ul className="w-full min-h-[100px] h-full">
+              <div className="max-h-[310px] h-full overflow-x-auto " >
+                <ul className="w-full min-h-[320px] ">
                   <AnimatePresence>
                       {userCourses && userCourses.filter(item => item.IsUserEnrolled).length ? (
                         userCourses
