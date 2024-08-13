@@ -64,11 +64,18 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 // import CourseCard from "@/components/CourseCard";
 import UserCourseCard from "@/components/UserCourseCard";
+import { Announcement } from "@/shared/types/announcement";
+import { FetchStudentAssessmentProgress } from '@/store/slices/studentSlice';
+import DashboardService from "@/services/api/dashboard";
 
 
 type size = number;
 // 
-export const CircularProgress = ({size ,progress,strokeWidth }) => {
+export const CircularProgress = ({size ,progress,strokeWidth } : {
+    size: number;
+    progress: number;
+    strokeWidth: number;
+  }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (progress / 100) * circumference;
@@ -138,9 +145,12 @@ const fadeInAnimationVariants = {
 
 const Page = () => {
   const [progress, setProgress] = useState(0); // Example progress value
-  const authUser = useSelector((state: RootState) => state.auth.user);
+  const authUser = useSelector((state: RootState) => state.auth.user); const dispatch = useDispatch();
+  const { studentAssessmentProgress, status, error } = useSelector((state: RootState) => state.student);
+  
 
   // console.log("Authsuser********", authUser)
+  console.log("STUDENT: ",  studentAssessmentProgress)
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -174,6 +184,18 @@ const Page = () => {
 
   console.log("recentApplication:", mostRecentApplication);
   console.log("id:", cohortPreAssessment);
+  const [announcementsData, setAnnouncementsData] = useState<Announcement[]>([]);
+
+  const enrolledCourseIds = userCourses?.map(course => course.id);
+
+  const formatTime = (createdAt: string) => {
+    const date = new Date(createdAt);
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+    return `${formattedHours}:${minutes} ${ampm}`;
+  };
 
   const router = useRouter();
 
@@ -376,7 +398,7 @@ const Page = () => {
   useEffect(() => {
     fetchAndSetMostRecentApplication();
     fetchUserCourses();
-  }, []);
+  }, [authUser]);
 
   useEffect(() => {
     fetchPreAssessmentForUserCohortAndCourse();
@@ -398,6 +420,54 @@ const Page = () => {
       updateAppliedCourseOnApplication();
     }
   }, [changeCourseState]);
+
+    useEffect(() => {
+    if (authUser?.id) {
+      dispatch(FetchStudentAssessmentProgress(authUser.id));
+    }
+  }, [dispatch, authUser?.id]);
+
+  useEffect(() => {
+    if (studentAssessmentProgress) {
+      setProgress(studentAssessmentProgress?.progress || 0);
+    }
+  }, [studentAssessmentProgress]);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const announcementsData = await DashboardService.getAnnouncements();
+        setAnnouncementsData(announcementsData as any);
+        console.log("STUDENTannouncementsData",announcementsData );
+      } catch (error) {
+        console.error("Error fetching announcements:", error);
+      }
+    };
+
+    fetchAnnouncements();
+  }, []);
+
+  // useEffect(() => {
+  //   const fetchAnnouncements = async () => {
+  //     try {
+  //       const announcementsData = await DashboardService.getAnnouncements();
+  //       const enrolledCourseIds = userCourses?.map(course => course.id);
+
+  //       const filteredAnnouncements = announcementsData.filter((announcement: Announcement) =>
+  //         enrolledCourseIds.includes(announcement.courseId)
+  //       );
+
+  //       setAnnouncementsData(filteredAnnouncements);
+  //       console.log("Filtered Announcements:", filteredAnnouncements);
+  //     } catch (error) {
+  //       console.error("Error fetching announcements:", error);
+  //     }
+  //   };
+
+  //   if (userCourses.length > 0) {
+  //     fetchAnnouncements();
+  //   }
+  // }, [userCourses]);
 
   const [isBannerVisible, setIsBannerVisible] = useState(true);
 
@@ -458,12 +528,56 @@ const Page = () => {
           
           <div className="grid gap-6 px-10  mx-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Announcements */}
-            <div className="col-span-2 bg-white p-4 rounded shadow-md">
+            {/*<div className="col-span-2 bg-white p-4 rounded shadow-md">
               <h2 className="text-lg font-semibold">Announcements</h2>
               <div className="flex flex-col justify-center items-center p-2">
                 <p className="text-gray-500 text-center">No announcement yet</p>
                 <p className="text-gray-500 text-center">Check back later to see the latest announcement from Ingryd</p>
-              </div>
+              </div> */}
+            <div className="col-span-2 bg-white p-4 rounded shadow-md">
+            <h2 className="text-lg font-semibold">Announcements</h2>
+            {announcementsData ? (announcementsData
+              .filter((announcement: Announcement) =>
+                       enrolledCourseIds?.includes(announcement.courseId)
+                     )
+                 .map((announcement: any) => (
+                        <div
+                          key={announcement.id}
+                          className="bg-[#F6F6F6] rounded-lg w-full"
+                        >
+                          <div className="flex py-2 items-start justify-between px-4 pb-8">
+                            <div className="flex items-center justify-start gap-2">
+                              {/* <Image
+                                src={logoUrl}
+                                width={30}
+                                height={30}
+                                alt="Logo"
+                              /> */}
+                              <div className="flex flex-col">
+                                <span
+                                  style={{ color: secondaryColor }}
+                                  className="font-semibold text-[15px]"
+                                >
+                                  {announcement.title}
+                                </span>
+                                <span className="text-[#808080] text-[12px] font-medium">
+                                  {announcement.announcement}
+                                </span>
+                              </div>
+                            </div>
+                            <span className="text-[#808080] text-[12px] font-medium">
+                              {formatTime(announcement.createdAt)}
+                            </span>
+                          </div>
+                        </div>
+                      ))):(
+
+                        <div className="flex flex-col justify-center items-center p-2">
+                          <p className="text-gray-500 text-center">No announcement yet</p>
+                          <p className="text-gray-500 text-center">Check back later to see the latest announcement from Ingryd</p>
+                        </div>
+
+                      )}
             </div>
 
             {/* Leaderboards */}
@@ -493,8 +607,10 @@ const Page = () => {
                     <div className=" h-3 rounded" style={{ width: '5%',background:"#1A183E" }}></div>
                   </div>
                   <div className="flex justify-between text-sm text-gray-500">
-                    <span>0/0 Modules</span>
-                    <span>0%</span>
+{/*                     <span>0/0 Modules</span>
+                    <span>0%</span> */}
+                     {studentAssessmentProgress?.completedModules || 0}/
+                     {studentAssessmentProgress?.totalModules || 0} Modules
                   </div>
                   
                   <div className="w-full bg-gray-200 h-3 rounded mt-1">
