@@ -65,6 +65,7 @@ import { motion, AnimatePresence } from "framer-motion";
 // import CourseCard from "@/components/CourseCard";
 import UserCourseCard from "@/components/UserCourseCard";
 
+
 type size = number;
 // 
 export const CircularProgress = ({size ,progress,strokeWidth }) => {
@@ -542,10 +543,11 @@ const Page = () => {
             {/* Courses */}
             <div className="row-span-3 p-4  w-full mx-auto bg-white rounded-xl shadow-md space-y-4 overflow-hidden ">
               <h2 className="text-xl font-semibold text-gray-900">Courses</h2>
-              
+              {/* scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-w-2   scrollbar-thumb-customDarkBlue scrollbar-track-transparent */}
 
-              <div className="max-h-[310px] h-full overflow-x-auto " >
-                <ul className="w-full min-h-[320px] ">
+             
+              <div className="max-h-[310px] h-full overflow-y-auto scrollbar scrollbar-thumb-customDarkBlue scrollbar-w-[4px] scrollbar-track-rounded-full scrollbar-thumb-rounded-full " >
+                <ul className="w-full min-h-[320px]">
                   <AnimatePresence>
                       {userCourses && userCourses.filter(item => item.IsUserEnrolled).length ? (
                         userCourses
