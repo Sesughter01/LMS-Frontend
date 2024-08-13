@@ -82,7 +82,7 @@ const UserCourseCard: React.FC<Course> = (course) => {
                             </div>
                             <div className="flex w-full item-end justify-end py-4 pt-7">
                                 <button className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer" style={{ background:"#1A183E" }}  onClick={() => router.push(pathname + "/" + course.id)}>
-                                  Continue Lesson
+                                  Get Started
                                 </button>
                             </div>
                            

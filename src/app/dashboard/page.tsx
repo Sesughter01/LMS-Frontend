@@ -64,6 +64,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 // import CourseCard from "@/components/CourseCard";
 import UserCourseCard from "@/components/UserCourseCard";
+import LeaderBoardCard from "@/components/LeaderBoardCard";
 import { Announcement } from "@/shared/types/announcement";
 import { FetchStudentAssessmentProgress } from '@/store/slices/studentSlice';
 import DashboardService from "@/services/api/dashboard";
@@ -535,57 +536,58 @@ const Page = () => {
                 <p className="text-gray-500 text-center">Check back later to see the latest announcement from Ingryd</p>
               </div> */}
             <div className="col-span-2 bg-white p-4 rounded shadow-md">
-            <h2 className="text-lg font-semibold">Announcements</h2>
-            {announcementsData ? (announcementsData
-              .filter((announcement: Announcement) =>
-                       enrolledCourseIds?.includes(announcement.courseId)
-                     )
+              <h2 className="text-lg font-semibold">Announcements</h2>
+              {announcementsData ? (announcementsData
+                .filter((announcement: Announcement) =>
+                      enrolledCourseIds?.includes(announcement.courseId)
+                    )
                  .map((announcement: any) => (
-                        <div
-                          key={announcement.id}
-                          className="bg-[#F6F6F6] rounded-lg w-full"
-                        >
-                          <div className="flex py-2 items-start justify-between px-4 pb-8">
-                            <div className="flex items-center justify-start gap-2">
-                              {/* <Image
-                                src={logoUrl}
-                                width={30}
-                                height={30}
-                                alt="Logo"
-                              /> */}
-                              <div className="flex flex-col">
-                                <span
-                                  style={{ color: secondaryColor }}
-                                  className="font-semibold text-[15px]"
-                                >
-                                  {announcement.title}
-                                </span>
-                                <span className="text-[#808080] text-[12px] font-medium">
-                                  {announcement.announcement}
-                                </span>
-                              </div>
+                      <div
+                        key={announcement.id}
+                        className="bg-[#F6F6F6] rounded-lg w-full"
+                      >
+                        <div className="flex py-2 items-start justify-between px-4 pb-8">
+                          <div className="flex items-center justify-start gap-2">
+                            {/* <Image
+                              src={logoUrl}
+                              width={30}
+                              height={30}
+                              alt="Logo"
+                            /> */}
+                            <div className="flex flex-col">
+                              <span
+                                style={{ color: secondaryColor }}
+                                className="font-semibold text-[15px]"
+                              >
+                                {announcement.title}
+                              </span>
+                              <span className="text-[#808080] text-[12px] font-medium">
+                                {announcement.announcement}
+                              </span>
                             </div>
-                            <span className="text-[#808080] text-[12px] font-medium">
-                              {formatTime(announcement.createdAt)}
-                            </span>
                           </div>
+                          <span className="text-[#808080] text-[12px] font-medium">
+                            {formatTime(announcement.createdAt)}
+                          </span>
                         </div>
-                      ))):(
-
-                        <div className="flex flex-col justify-center items-center p-2">
-                          <p className="text-gray-500 text-center">No announcement yet</p>
-                          <p className="text-gray-500 text-center">Check back later to see the latest announcement from Ingryd</p>
-                        </div>
-
-                      )}
+                      </div>
+                    ))):(
+                      <div className="flex flex-col justify-center items-center p-2">
+                        <p className="text-gray-500 text-center">No announcement yet</p>
+                        <p className="text-gray-500 text-center">Check back later to see the latest announcement from Ingryd</p>
+                      </div>
+                    )}
             </div>
 
             {/* Leaderboards */}
             <div className="row-span-3 col-span-1 bg-white p-4 rounded shadow">
-              <h2 className="text-lg font-semibold mb-2">Leaderboards</h2>
-              <div className="flex flex-col justify-center items-center p-2">
-                <p className="text-gray-600 text-center">No leaderboards yet</p>
-                <p className="text-gray-400 text-sm text-center">Complete your first assessment and check back later for the rankings</p>
+              <h2 className="text-lg font-semibold">Leaderboards</h2>
+              <div className="max-h-[310px] h-full overflow-y-auto scrollbar scrollbar-thumb-customDarkBlue scrollbar-w-[4px] scrollbar-track-rounded-full scrollbar-thumb-rounded-full mt-2">
+                <LeaderBoardCard/>
+                {/* <div className="flex flex-col justify-center items-center p-2">
+                  <p className="text-gray-600 text-center">No leaderboards yet</p>
+                  <p className="text-gray-400 text-sm text-center">Complete your first assessment and check back later for the rankings</p>
+                </div> */}
               </div>
             </div>
 
@@ -607,7 +609,7 @@ const Page = () => {
                     <div className=" h-3 rounded" style={{ width: '5%',background:"#1A183E" }}></div>
                   </div>
                   <div className="flex justify-between text-sm text-gray-500">
-{/*                     <span>0/0 Modules</span>
+                    {/*<span>0/0 Modules</span>
                     <span>0%</span> */}
                      {studentAssessmentProgress?.completedModules || 0}/
                      {studentAssessmentProgress?.totalModules || 0} Modules
@@ -663,7 +665,7 @@ const Page = () => {
 
              
               <div className="max-h-[310px] h-full overflow-y-auto scrollbar scrollbar-thumb-customDarkBlue scrollbar-w-[4px] scrollbar-track-rounded-full scrollbar-thumb-rounded-full " >
-                <ul className="w-full min-h-[320px]">
+                <ul className="w-full  ">
                   <AnimatePresence>
                       {userCourses && userCourses.filter(item => item.IsUserEnrolled).length ? (
                         userCourses
@@ -679,7 +681,7 @@ const Page = () => {
                                 once: true,
                               }}
                               custom={index}
-                              className="flex w-full h-full"
+                              className="flex w-full h-full flex flex-col gap-3"
                             >
                               <UserCourseCard key={singleCourse.id} {...singleCourse} />
                             </motion.li>
