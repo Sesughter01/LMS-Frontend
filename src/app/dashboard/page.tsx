@@ -182,6 +182,8 @@ const Page = () => {
     const [cohortStartDate, setCohortStartDate] = useState<null | string>(null);
     const [modalOpen, setModalOpen] = useState(false)
   const [userCourses, setUserCourses] = useState<Course[]>();
+  const [totalCourseModules, setTotalCourseModules] = useState<number>(0);
+  const [totalCourseAssessments, setTotalCourseAssessments] = useState<number>(0);
 
   console.log("recentApplication:", mostRecentApplication);
   console.log("id:", cohortPreAssessment);
@@ -281,6 +283,8 @@ const Page = () => {
 
           // setCourses([courses]);
           setUserCourses([courses]);
+          setTotalCourseModules(courses.modules)
+          setTotalCourseAssessments(courses.assessments)
           // setUserCourses([courses]);
         }
         
@@ -619,7 +623,8 @@ const Page = () => {
                     <div className="h-3 rounded" style={{ width: '5%',background:"#1A183E" }}></div>
                   </div>
                   <div className="flex justify-between text-sm text-gray-500 mt-2">
-                    <span>0/0 Assessments</span>
+                    <span>{studentAssessmentProgress?.completedModules || 0}/
+                    { totalCourseAssessments || 0}  Assessments</span>
                     <span>0%</span>
                   </div>
                 </div>
