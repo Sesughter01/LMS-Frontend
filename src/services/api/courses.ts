@@ -92,6 +92,23 @@ export default class courseService {
     const response = await ApiRequestClient.get(url);
     return response.data;
   }
+  // https://lms-api-staging.ingrydacademy.com/api/v1/trainees/courses
+  static async GetIndividualUserCourseDetails(
+   
+    ): Promise<CourseDetail> {
+      let url = `/api/v1/trainees/courses`;
+
+      const response = await ApiRequestClient.get(url);
+      return response.data;
+    }
+  static async GetIndividualUserCourseId(
+    traineeId: number | null
+    ): Promise<[]> {
+      let url = `/api/v1/trainees/${traineeId}/enrollments`;
+
+      const response = await ApiRequestClient.get(url);
+      return response.data;
+    }
 
   static async GetCourseOverview(courseId: number): Promise<courseOverview> {
     let url = `/api/v1/courses/${courseId}/overview`;
@@ -114,6 +131,38 @@ export default class courseService {
     });
     return response.data;
   }
+  static async createOrder(
+    couponCode: any,
+    paymentOption: string,
+    courseId: number
+  ): Promise<any> {
+    let url = `/payments/paypal/create-order`;
+
+    const response = await ApiRequestClient.post(url, {
+      couponCode: couponCode ? couponCode : "",
+      paymentOption,
+      courseId,
+    });
+    return response.data;
+  }
+
+  static async onApprove(data:any) {
+    try {
+      // Capture the funds from the transaction
+      const response = await ApiRequestClient.post('/payments/paypal/capture-order', {
+        orderID: data.orderID,
+      });
+
+      const details = response.data;
+
+      // Show success message to buyer
+      alert(`Transaction completed by ${details.payer.name.given_name}`);
+    } catch (error) {
+      console.error('Error capturing PayPal order:', error);
+      throw error;
+    }
+  }
+
 
   static async confirmPayment(
     { ref, courseId }: any,
@@ -133,6 +182,7 @@ export default class courseService {
         organization: organizationId,
       },
     });
+    console.log("verifyPayment Response: ",  response.data )
     return response.data;
   }
 
@@ -222,15 +272,16 @@ export default class courseService {
 
   static async GetUserCourseDetails(
     userId: number
-  ): Promise<CourseDetail> {
+  ): Promise<Course[]> {
     // let url = `/api/v1/courses/${userId}`;
     // let url = `/api/v1/trainees/${userId}/enrollments`;
     let url = `/api/v1/trainees/courses`;
     // trainees/{traineeUserId}/enrollments’
     const response = await ApiRequestClient.get(url);
-    console.log("RESPONSE DATA:" , response.data)
+    console.log("COURSE DATA NEW: ", response.data)
     return response.data;
   }
+
 }
 
 
