@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import DashboardService from "@/services/api/dashboard";
 import { ApiRequestClient } from "@/shared/utils/api-client";
+import courseService from "@/services/api/courses";
 import { toast } from "react-toastify";
 
 const errorMessages = {
@@ -105,8 +106,10 @@ const AnnouncementModal: React.FC<AssignCourseModalProps> = ({ isOpen, onClose, 
     const fetchCourses = async () => {
       try {
         const response = await ApiRequestClient.get("/api/v1/courses");
+        // const response = await courseService.GetAllAvailableCourses();
+        console.log("RAW ADMIN: ",response )
         const data = await response.data;
-        setCourses(data);
+        setCourses(data.results);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -185,11 +188,16 @@ const AnnouncementModal: React.FC<AssignCourseModalProps> = ({ isOpen, onClose, 
               <option value="" disabled>
                 Select a course
               </option>
-              {courses.map((course) => (
+               {courses && courses.length > 0 ? (courses.map((course) => (
                 <option key={course.id} value={course.id}>
                   {course.courseTitle}
                 </option>
-              ))}
+              ))
+            ) : (
+              <option selected>
+                No courses create courses
+            </option>
+            )}
             </select>
           </div>
 
