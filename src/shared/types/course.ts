@@ -34,6 +34,7 @@ export interface CourseDetail {
   coursePrice: number;
   courseProfileImageReferenceId: string;
   courseStartDate: string;
+   assessments:number;
   courseThumbnailImageReferenceId: string;
   courseTitle: string;
   createdAt: string;
