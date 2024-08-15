@@ -4,20 +4,19 @@ export interface Course {
   coursePrice?: any;
   courseDescription: string;
   courseListingImageReferenceId: string;
-  // image: string;
-  courseImage : string;
+  courseImage: string;
   cohortId: number;
   programmeId: number;
   cohortName: string;
 
   qualifyForCoupon: boolean;
-  isEnrolled: boolean;
+  IsUserEnrolled: boolean;
 
   courseStartDate: string;
   courseEndDate: string;
 
   createdAt: string;
-
+  results:any;
   students: number;
   instructors: number;
   modules: number;
@@ -31,10 +30,13 @@ export interface CourseDetail {
   courseDescription: string;
   courseEndDate: string;
   courseListingImageReferenceId: string;
+  
+  courseModules:[];
   coursePrice: number;
+  courseImage:string;
+  assessments:number;
   courseProfileImageReferenceId: string;
   courseStartDate: string;
-   assessments:number;
   courseThumbnailImageReferenceId: string;
   courseTitle: string;
   createdAt: string;
@@ -53,6 +55,7 @@ export interface CourseDetail {
   hours: number;
   courseOverview: any;
   courseInstructors: any;
+  IsUserEnrolled: boolean;
 }
 
 export interface courseOverview {
