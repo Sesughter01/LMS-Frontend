@@ -616,7 +616,7 @@ const Page = () => {
                     {/*<span>0/0 Modules</span>
                     <span>0%</span> */}
                      {studentAssessmentProgress?.completedModules || 0}/
-                     {studentAssessmentProgress?.totalModules || 0} Modules
+                     {totalCourseModules || 0} Modules
                   </div>
                   
                   <div className="w-full bg-gray-200 h-3 rounded mt-1">
