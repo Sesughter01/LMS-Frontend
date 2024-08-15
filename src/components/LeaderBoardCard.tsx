@@ -35,7 +35,7 @@ const LeaderBoardCard = () => {
            
            <div className=" max-w-lg w-full flex items-center justify-center ">
                 <ul className="w-full flex gap-2.5 flex-col">
-                    <li className="flex items-center w-full shadow-md py-4 px-6" style={{background:"#DDDDDD",width: "100%",height: "54px",borderRadius: "4px",opacity: "0px"}}>
+                    <li className="flex items-center w-full shadow-md py-4 px-6 min-w-[240px]" style={{background:"#DDDDDD",width: "100%",height: "54px",borderRadius: "4px",opacity: "0px"}}>
                         <img className="w-9 h-9 rounded-full object-cover mr-4" src="https://randomuser.me/api/portraits/women/72.jpg"
                             alt="User avatar"/>
                         <div className="flex-1">
@@ -43,7 +43,7 @@ const LeaderBoardCard = () => {
                             <p className="text-gray-600 text-[10px]">Average grade: 84%</p>
                         </div>
                     </li>
-                    <li className="flex items-center w-full shadow-md py-4 px-6" style={{background:"#DDDDDD",width: "100%",height: "54px",borderRadius: "4px",opacity: "0px"}}>
+                    <li className="flex items-center w-full shadow-md py-4 px-6 min-w-[240px]" style={{background:"#DDDDDD",width: "100%",height: "54px",borderRadius: "4px",opacity: "0px"}}>
                         <img className="w-9 h-9 rounded-full object-cover mr-4" src="https://randomuser.me/api/portraits/men/40.jpg"
                             alt="User avatar"/>
                         <div className="flex-1">
@@ -51,7 +51,7 @@ const LeaderBoardCard = () => {
                             <p className="text-gray-600 text-[10px]">Average grade: 84%</p>
                         </div>
                     </li>
-                    <li className="flex items-center w-full shadow-md py-4 px-6" style={{background:"#DDDDDD",width: "100%",height: "54px",borderRadius: "4px",opacity: "0px"}}>
+                    <li className="flex items-center w-full shadow-md py-4 px-6 min-w-[240px]" style={{background:"#DDDDDD",width: "100%",height: "54px",borderRadius: "4px",opacity: "0px"}}>
                         <img className="w-9 h-9 rounded-full object-cover mr-4" src="https://randomuser.me/api/portraits/women/54.jpg"
                             alt="User avatar"/>
                         <div className="flex-1">
@@ -59,7 +59,7 @@ const LeaderBoardCard = () => {
                             <p className="text-gray-600 text-[10px]">Average grade: 84%</p>
                         </div>
                     </li>
-                    <li className="flex items-center w-full shadow-md py-4 px-6" style={{background:"#DDDDDD",width: "100%",height: "54px",borderRadius: "4px",opacity: "0px"}}>
+                    <li className="flex items-center w-full shadow-md py-4 px-6 min-w-[240px]" style={{background:"#DDDDDD",width: "100%",height: "54px",borderRadius: "4px",opacity: "0px"}}>
                         <img className="w-9 h-9 rounded-full object-cover mr-4" src="https://randomuser.me/api/portraits/men/83.jpg"
                             alt="User avatar"/>
                         <div className="flex-1">
@@ -67,7 +67,7 @@ const LeaderBoardCard = () => {
                             <p className="text-gray-600 text-[10px]">Average grade: 84%</p>
                         </div>
                     </li>
-                    <li className="flex items-center w-full shadow-md py-4 px-6" style={{background:"#DDDDDD",width: "100%",height: "54px",borderRadius: "4px",opacity: "0px"}}>
+                    <li className="flex items-center w-full shadow-md py-4 px-6 min-w-[240px]" style={{background:"#DDDDDD",width: "100%",height: "54px",borderRadius: "4px",opacity: "0px"}}>
                         <img className="w-9 h-9 rounded-full object-cover mr-4" src="https://randomuser.me/api/portraits/women/17.jpg"
                             alt="User avatar"/>
                         <div className="flex-1">

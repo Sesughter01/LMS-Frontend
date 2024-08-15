@@ -584,7 +584,7 @@ const Page = () => {
             </div>
 
             {/* Leaderboards */}
-            <div className="row-span-3 col-span-1 bg-white p-4 rounded shadow">
+            <div className=" flex flex-col w-full row-span-3 col-span-1 bg-white p-4 rounded shadow ">
               <h2 className="text-lg font-semibold">Leaderboards</h2>
               <div className="max-h-[310px] h-full overflow-y-auto scrollbar scrollbar-thumb-customDarkBlue scrollbar-w-[4px] scrollbar-track-rounded-full scrollbar-thumb-rounded-full mt-2">
                 <LeaderBoardCard/>
@@ -664,7 +664,7 @@ const Page = () => {
             </div>
 
             {/* Courses */}
-            <div className="row-span-3 p-4  w-full mx-auto bg-white rounded-xl shadow-md space-y-4 overflow-hidden ">
+            <div className="row-span-3 p-4  w-full  bg-white rounded-xl shadow-md space-y-4 overflow-hidden ">
               <h2 className="text-xl font-semibold text-gray-900">Courses</h2>
               {/* scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-w-2   scrollbar-thumb-customDarkBlue scrollbar-track-transparent */}
 
