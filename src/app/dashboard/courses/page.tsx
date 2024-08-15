@@ -238,9 +238,10 @@ const Page = () => {
                           </motion.li>
                         );
                       })} */}
+{/*                     && displayedCourses.filter(item => item.IsUserEnrolled).length */}
 
                       
-                  {displayedCourses && displayedCourses.filter(item => item.IsUserEnrolled).length ? (
+                  {displayedCourses ? (
                     displayedCourses
                       .filter(item => item.IsUserEnrolled)
                       .map((singleCourse, index) => (
