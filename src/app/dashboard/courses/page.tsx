@@ -2,13 +2,14 @@
 
 import SideBar from "@/components/SideBar";
 import DashNav from "@/components/DashNav";
-
+// import { SearchIcon,SlidersHorizontal,ArrowUpDown } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SearchIcon,SlidersHorizontal,ArrowUpDown } from "lucide-react";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import CourseCard from "@/components/CourseCard";
+import CourseDetailsCard from "@/components/CourseDetailsCard";
 import { useEffect, useState } from "react";
-import { Course } from "@/shared/types/course";
+import { Course,CourseDetail } from "@/shared/types/course";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import courseService from "@/services/api/courses";
@@ -39,7 +40,8 @@ const Page = () => {
 
   const [courses, setCourses] = useState<Course[]>();
   const [displayedCourses, setDisplayedCourses] = useState<Course[]>();
-  const [userCourses, setUserCourses] = useState<Course[]>();
+  const [userCourses, setUserCourses] = useState<CourseDetail[] | null>();
+  
   const [segment, setSegment] = useState("all");
 
   const defaultProgramme = useSelector((state: RootState) => state.programme.defaultProgramme);
@@ -116,7 +118,8 @@ const Page = () => {
           // let courses = await courseService.GetAllAvailableCoursesInProgramme(defaultProgramme?.id, mostRecentApplication?.cohortId);
         // console.log("couresewwwwwwwwwwwwwwwwwww", courses.results)
           // let courses = await courseService.GetIndividualCourseDetails(Number(userCourseId));
-          let courses = await courseService.GetUserCourseDetails(Number(authUser?.id));
+          // let courses = await courseService.GetUserCourseDetails(Number(authUser?.id));
+          let courses = await courseService.GetIndividualUserCourseDetails();
 
           console.log("mineeeeeeeeeeeeee", courses)
 
@@ -130,7 +133,7 @@ const Page = () => {
         // console.log('errorr', err)
     }
   };
-
+ 
   useEffect(() => {
     fetchAndSetMostRecentApplication();
   }, []);
@@ -138,7 +141,7 @@ const Page = () => {
   useEffect(() => {
     fetchAllCourses();
     fetchUserCourses()
-  }, [mostRecentApplication]);
+  }, [authUser]);
 
   useEffect(() => {
     renderBasedOnSegment();
@@ -150,7 +153,7 @@ const Page = () => {
     }
 
     if (segment === "mine") {
-      let myCourses = courses?.filter((course) => course.isEnrolled);
+      let myCourses = courses?.filter((course) => course.IsUserEnrolled);
       setDisplayedCourses(myCourses);
     }
   };
@@ -181,18 +184,17 @@ const Page = () => {
 
         <section className="grow px-8 flex gap-8 ">
           <Tabs defaultValue="all" className="w-full ">
-            <TabsList className="w-full h-fit flex flex-col justify-between lg:flex-row gap-4 ">
-              <div className="flex gap-2">  
-                <div className="border border-gray-200 flex gap-2 items-center px-3 rounded-lg focus-within:outline outline-1">
-                  <SearchIcon className="w-4 h-4 text-gray-500" />
-                  <input
-                    type="text"
-                    className="outline-0 grow border-0 py-2"
-                    placeholder="Search"
-                    onChange={(event) => searchForACourse(event.target.value)}
-                  />
-                </div>
-                <div className="border border-gray-200 flex gap-2 items-center w-fit px-3 rounded-lg focus-within:outline outline-1 ml-2">
+            <TabsList className="w-full h-fit flex flex-col lg:flex-row gap-4 ">
+              <div className="border border-gray-200 flex gap-2 items-center px-3 rounded-lg focus-within:outline outline-1 mr-auto">
+                <SearchIcon className="w-4 h-4 text-gray-500" />
+                <input
+                  type="text"
+                  className="outline-0 grow border-0 py-2"
+                  placeholder="Search"
+                  onChange={(event) => searchForACourse(event.target.value)}
+                />
+              </div>
+              <div className="border border-gray-200 flex gap-2 items-center w-fit px-3 rounded-lg focus-within:outline outline-1 ml-2">
                   <SlidersHorizontal className="w-4 h-4 text-gray-500"/>
                   <p className='text-gray-500'>filter</p>
                 </div>
@@ -200,7 +202,6 @@ const Page = () => {
                   <ArrowUpDown className="w-4 h-4 text-gray-500"/>
                   <p className='text-gray-500'>sort</p>
                 </div>
-              </div>
               <div className="border border-gray-200 rounded-lg p-1 flex w-full lg:w-fit">
                 <TabsTrigger value="all" className={`lg:px-20 py-2 grow rounded-md data-[state=active]:bg-secondary data-[state=active]:text-white`}>
                   All Courses
@@ -238,12 +239,10 @@ const Page = () => {
                           </motion.li>
                         );
                       })} */}
-{/*                     && displayedCourses.filter(item => item.IsUserEnrolled).length */}
 
-                      
-                  {displayedCourses ? (
+                {displayedCourses ? (
                     displayedCourses
-                      .filter(item => item.IsUserEnrolled)
+                      // .filter(item => item.IsUserEnrolled)
                       .map((singleCourse, index) => (
                         <motion.li
                           key={index}
@@ -272,30 +271,11 @@ const Page = () => {
                <TabsContent value={"mine"} className="py-8 ">
                 <ul className="grid lg:grid-cols-2 w-full gap-4">
                <AnimatePresence>
-                  {/* {displayedCourses && displayedCourses.filter(item => item.IsUserEnrolled).length ? (
-                    displayedCourses
-                      .filter(item => item.IsUserEnrolled)
-                      .map((singleCourse, index) => (
-                        <motion.li
-                          key={index}
-                          variants={fadeInAnimationVariants}
-                          initial="initial"
-                          whileInView="animate"
-                          exit="exit"
-                          viewport={{
-                            once: true,
-                          }}
-                          custom={index}
-                          className="flex w-full h-full"
-                        >
-                          <CourseCard key={singleCourse.id} {...singleCourse} />
-                        </motion.li>
-                      )) */}
-                      {userCourses  ? (
-                        userCourses
+                  {userCourses  ? (
+                    userCourses
                       // .filter(item => item.IsUserEnrolled)
                       // .filter(item => item.isEnrolled)
-                      .map((singleCourse, index) => (
+                      .map((singleCourseDetail:CourseDetail, index:number) => (
                         <motion.li
                           key={index}
                           variants={fadeInAnimationVariants}
@@ -308,7 +288,7 @@ const Page = () => {
                           custom={index}
                           className="flex w-full h-full"
                         >
-                          <CourseCard key={singleCourse.id} {...singleCourse} />
+                          <CourseDetailsCard key={singleCourseDetail.id} {...singleCourseDetail} />
                         </motion.li>
                       ))
                   ) : (
