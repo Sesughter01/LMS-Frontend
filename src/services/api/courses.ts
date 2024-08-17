@@ -95,7 +95,7 @@ export default class courseService {
   // https://lms-api-staging.ingrydacademy.com/api/v1/trainees/courses
   static async GetIndividualUserCourseDetails(
    
-    ): Promise<CourseDetail> {
+    ): Promise<CourseDetail[]> {
       let url = `/api/v1/trainees/courses`;
 
       const response = await ApiRequestClient.get(url);
