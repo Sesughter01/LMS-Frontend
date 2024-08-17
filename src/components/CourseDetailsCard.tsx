@@ -55,17 +55,17 @@ const CourseDetailsCard: React.FC<CourseDetail> = (coursedetail) => {
            
             <div className='w-[30%] shrink-0 bg-gray-100 h-full rounded-lg overflow-hidden relative'>
                 {/* <Image src={} alt="course image" className='object-cover' fill /> */}
-                <Image src={arrayCourseDetails[0].courseImage || courseImageSelection} alt="course image" className='object-cover rounded-lg' fill />
+                <Image src={coursedetail.courseImage || courseImageSelection} alt="course image" className='object-cover rounded-lg' fill />
             </div>
             <div className='flex flex-col gap-2 grow'>
                 <div className='flex gap-2 justify-between py-2 border-b border-gray-100'>
-                    <p className='text-2xl font-bold text-gray-800 mb-2'>{arrayCourseDetails[0].courseTitle}</p>
+                    <p className='text-2xl font-bold text-gray-800 mb-2'>{coursedetail.courseTitle}</p>
                     {/* <BookmarkIcon /> */}
                 </div>
                 <ul className="mb-2">
                     <li className='flex items-center text-gray-700 mb-1'>
                     <span className="inline-block w-2 h-2 bg-pink-500 mr-2"></span>
-                        {arrayCourseDetails[0].courseDescription}
+                        {coursedetail.courseDescription}
                     </li>
                     
                     
