@@ -1,5 +1,5 @@
 
-import { Course } from '@/shared/types/course'
+import { Course,CourseDetail } from '@/shared/types/course'
 import { Book, BookmarkIcon, Clock10Icon } from 'lucide-react'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
@@ -20,7 +20,7 @@ const coursesImagesDict = {
 
 
 
-const UserCourseCard: React.FC<Course> = (course) => {
+const UserCourseCard: React.FC<CourseDetail> = (course) => {
 
     const router = useRouter()
     const pathname = usePathname()
@@ -81,7 +81,7 @@ const UserCourseCard: React.FC<Course> = (course) => {
                                 <p className="flex items-center gap-1 text-[12px] "><Clock10Icon className='text-primary h-4' /> 200 hrs 45 mins</p>
                             </div>
                             <div className="flex w-full item-end justify-end py-4 pt-7">
-                                <button className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer" style={{ background:"#1A183E" }}  onClick={() => router.push(pathname + "/" + course.id)}>
+                                <button className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer" style={{ background:"#1A183E" }}  onClick={() => router.push(pathname + "/courses/" + course.id + "/learn")}>
                                   Get Started
                                 </button>
                             </div>
