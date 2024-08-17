@@ -124,7 +124,7 @@ const Page = () => {
           console.log("mineeeeeeeeeeeeee", courses)
 
           // setCourses([courses]);
-          setUserCourses([courses]);
+          setUserCourses(courses);
           // setUserCourses([courses]);
         }
         
@@ -271,7 +271,7 @@ const Page = () => {
                <TabsContent value={"mine"} className="py-8 ">
                 <ul className="grid lg:grid-cols-2 w-full gap-4">
                <AnimatePresence>
-                  {userCourses  ? (
+                  {userCourses && userCourses?.length > 0 ? (
                     userCourses
                       // .filter(item => item.IsUserEnrolled)
                       // .filter(item => item.isEnrolled)
