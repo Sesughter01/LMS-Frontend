@@ -12,7 +12,7 @@ import appIcon from "@/assets/material-symbols_app-registration.svg";
 import sampImg1 from "@/assets/sample_img1.jpg";
 import sampImg2 from "@/assets/Rectangle 151.png";
 
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown,ChevronDown } from "lucide-react";
 
 import {
   cn,
@@ -184,6 +184,9 @@ const Page = () => {
   const [userCourses, setUserCourses] = useState<Course[]>();
   const [totalCourseModules, setTotalCourseModules] = useState<number>(0);
   const [totalCourseAssessments, setTotalCourseAssessments] = useState<number>(0);
+  const [selectedCourse, setSelectedCourse] = useState<CourseDetail | null>(
+    null
+  );
 
   console.log("recentApplication:", mostRecentApplication);
   console.log("id:", cohortPreAssessment);
@@ -277,18 +280,26 @@ const Page = () => {
         }else{
           // let courses = await courseService.GetAllAvailableCoursesInProgramme(defaultProgramme?.id, mostRecentApplication?.cohortId);
         // console.log("couresewwwwwwwwwwwwwwwwwww", courses.results)
-          let courses = await courseService.GetIndividualCourseDetails(Number(userCourseId));
+          let courses2 = await courseService.GetIndividualCourseDetails(Number(userCourseId));
+          let courses = await courseService.GetIndividualUserCourseDetails();
 
-          console.log("mineeeeeeeeeeeeee", courses)
+          console.log("mineeeeeeeeeeeeee2", courses)
+          console.log("mineeeeeeeeeeeeee3", courses2)
 
           // setCourses([courses]);
-          setUserCourses([courses]);
-          setTotalCourseModules(courses.modules)
-          setTotalCourseAssessments(courses.assessments)
+          // setUserCourses([courses]);
+          // setTotalCourseModules(courses.modules)
+          // setTotalCourseAssessments(courses.assessments)
+         setUserCourses(courses);
+           if (courses.length > 0) {
+            handleCourseSelection(courses[0]);
+          }
+          setTotalCourseModules(courses2.modules)
+          setTotalCourseAssessments(courses2.assessments)
           // setUserCourses([courses]);
         }
         
-    }catch(err){
+    }catch(err: any){
       toast.error(err.message)
         console.log('errorr', err)
     }
@@ -399,7 +410,12 @@ const Page = () => {
 
   // <p className="">You are required to complete both assessments below to get the average
   //     score to be eligible for free course enrollment.</p>
-
+  const handleCourseSelection = (course: CourseDetail) => {
+    setSelectedCourse(course);
+    setProgress(course.progress || 0);
+    setTotalCourseModules(course.modules || 0);
+    setTotalCourseAssessments(course.assessments || 0);
+  };
   useEffect(() => {
     fetchAndSetMostRecentApplication();
     fetchUserCourses();
@@ -452,28 +468,6 @@ const Page = () => {
     fetchAnnouncements();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchAnnouncements = async () => {
-  //     try {
-  //       const announcementsData = await DashboardService.getAnnouncements();
-  //       const enrolledCourseIds = userCourses?.map(course => course.id);
-
-  //       const filteredAnnouncements = announcementsData.filter((announcement: Announcement) =>
-  //         enrolledCourseIds.includes(announcement.courseId)
-  //       );
-
-  //       setAnnouncementsData(filteredAnnouncements);
-  //       console.log("Filtered Announcements:", filteredAnnouncements);
-  //     } catch (error) {
-  //       console.error("Error fetching announcements:", error);
-  //     }
-  //   };
-
-  //   if (userCourses.length > 0) {
-  //     fetchAnnouncements();
-  //   }
-  // }, [userCourses]);
-
   const [isBannerVisible, setIsBannerVisible] = useState(true);
 
   console.log(mostRecentApplication);
@@ -488,7 +482,22 @@ const Page = () => {
       y: 0,
     },
   };
-
+  
+  // function getModulesAndAssessmentsSum(courses: Array<{ modules: number; assessments: number }>) {
+  //   let totalModules = 0;
+  //   let totalAssessments = 0;
+  
+  //   for (const course of courses) {
+  //     totalModules += course.modules || 0;  // Handle cases where module might be undefined
+  //     totalAssessments += course.assessments || 0;  // Handle cases where assessment might be undefined
+  //   }
+  
+  //   return {
+  //     totalModules,
+  //     totalAssessments,
+  //   };
+  // }
+  
   return (
     <section className="flex w-full min-h-screen h-auto">
       <SideBar logoUrl={logoUrl} secondaryColor={secondaryColor} />
@@ -543,7 +552,7 @@ const Page = () => {
               <h2 className="text-lg font-semibold">Announcements</h2>
               {announcementsData ? (announcementsData
                 .filter((announcement: Announcement) =>
-                      enrolledCourseIds?.includes(announcement.courseId)
+                      enrolledCourseIds?.includes(announcement.courseId || 0)
                     )
                  .map((announcement: any) => (
                       <div
@@ -598,7 +607,39 @@ const Page = () => {
             {/* Progress Summary */}
 
             <div className="flex flex-col  row-span-3 bg-white p-4 rounded w-full shadow-md gap-4">
-              <h2 className="text-lg font-semibold">Progress Summary</h2>
+              <div className="flex gap-4">
+                <h2 className="text-lg font-semibold">Progress Summary</h2>
+                <div className="relative mt-4">
+                <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-label="Select a course"
+                    className="w-full flex justify-between items-center"
+                  >
+                    {selectedCourse?.courseTitle || "Select a course"}
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <ul className="max-h-56 overflow-y-auto">
+                    {userCourses?.map((course) => (
+                      <li
+                        key={course.id}
+                        onClick={() => handleCourseSelection(course)}
+                        className="p-2 hover:bg-gray-100 bg-white cursor-pointer"
+                      >
+                        {course.courseTitle}
+                      </li>
+                    ))}
+                  </ul>
+                </PopoverContent>
+              </Popover>
+                </div>
+
+              </div>
               <div className="flex items-center mt-4 gap-4">
                 <CircularProgress size={100} progress={progress} strokeWidth={10} />
                 {/* <div className="relative">
