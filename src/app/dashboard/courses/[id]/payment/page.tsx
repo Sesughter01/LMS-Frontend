@@ -198,17 +198,14 @@ function onApprove(data) {
           </h1>
         </div>
         {details ? (
-          <div>
-            <section className="flex flex-col items-center gap-8 px-6 lg:px-36">
-              <div className="flex flex-col-reverse lg:flex-row gap-2 w-full lg:w-2/3 cursor-pointer hover:bg-gray-50 border border-gray-200 rounded-lg p-2">
-                <div className="flex flex-col gap-2 grow">
-                  <div
-                    className="flex justify-between font-bold
-                                 p-2 border-b border-gray-100"
-                  >
+          <div className="flex flex-col gap-8">
+            <section className="flex flex-col items-center gap-8 px-6 lg:px-36 lg:mx-auto">
+              <div className="flex flex-col-reverse lg:flex-row gap-2 w-full lg:w-max cursor-pointer hover:bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
+                <div className="flex flex-col gap-2 grow p-2 max-h-[221px] w-full" >
+                  <div className="flex justify-between font-bold p-2 border-b border-gray-100">
                     <p>{details.courseTitle}</p>
                   </div>
-                  {/* <ul className='flex flex-col gap-1 text-gray-500 text-xs list-disc pl-8'>
+                  <ul className='flex flex-col gap-1 text-gray-500 text-xs list-disc pl-8'>
                                     <li>
                                         {details.courseDescription}
                                     </li>
@@ -224,7 +221,7 @@ function onApprove(data) {
                                     <li>
                                         Deployment and Scalability
                                     </li>
-                                </ul> */}
+                                </ul>
                   <div className="flex gap-8 mt-6 text-xs">
                     <p className="flex items-center gap-1">
                       <Book className="text-primary h-4" /> 12 Lessons
@@ -234,13 +231,13 @@ function onApprove(data) {
                     </p>
                   </div>
                 </div>
-                <div className="w-full aspect-video lg:w-[30%] shrink-0 bg-gray-100 lg:h-full flex relative">
+                <div className="w-full aspect-video lg:w-[25%] shrink-0 bg-gray-100 lg:h-full max-h-[221px] flex relative rounded-r-lg">
                   <Image src={courseImage} alt="course image" className="object-cover" fill />
                 </div>
               </div>
             </section>
-            <section className="lg:w-max px-6 lg:px-8 flex flex-col gap-8 lg:mx-auto py-16">
-              <div className="flex flex-col items-center gap-8 ">
+            <section className="flex flex-col gap-8 items-center justify-center px-6 lg:mx-auto">
+              <div className="flex flex-col items-center gap-8 w-full px-6 lg:px-8  py-16 shadow rounded-[10px]">
                 <h1 className="text-lg font-semibold">Payment</h1>
                 <h1 className="text-3xl font-semibold">#{price}</h1>
                 <p className="text-lg font-semibold">Select your preferred payment plan</p>
@@ -251,15 +248,15 @@ function onApprove(data) {
                 >
                   <Label
                     htmlFor="option-one"
-                    className="flex flex-col p-4 rounded-lg hover:bg-gray-100 cursor-pointer border border-gray-300 gap-6 w-[240px] max-w-full"
+                    className="flex flex-col p-4 rounded-lg hover:bg-gray-100 active:bg-gray-700 cursor-pointer border border-gray-300 gap-6 w-[240px] max-w-full"
                   >
                     <RadioGroupItem value={paymentOption.FULL} id={paymentOption.FULL} className="border-gray-700 text-gray-700" />
                     <div className="p-0 flex flex-col gap-3 list-disc">
                       <h1 className="font-semibold text-base">Pay now</h1>
                       <ul className="text-gray-500 text-sm flex flex-col gap-2">
-                        <li>{price}</li>
-                        <li>you pay only once</li>
-                        <li>No other payment required</li>
+                        <li className='flex items-center text-gray-700'><span className="inline-block w-1 h-1 bg-[#1A183E] rounded mr-2"></span>{price}</li>
+                        <li className='flex items-center text-gray-700'><span className="inline-block w-1 h-1 bg-[#1A183E] rounded mr-2"></span>you pay only once</li>
+                        <li className='flex items-center text-gray-700'><span className="inline-block w-1 h-1 bg-[#1A183E] rounded mr-2"></span>No other payment required</li>
                       </ul>
                     </div>
                   </Label>
@@ -271,13 +268,54 @@ function onApprove(data) {
                     <div className="p-0 flex flex-col gap-3 list-disc">
                       <h1 className="font-semibold text-base">Pay in Installments</h1>
                       <ul className="text-gray-500 text-sm flex flex-col gap-2">
-                        <li>40% = 72,000</li>
-                        <li>30% = 54,000</li>
-                        <li>30% = 54,000</li>
+                        <li className='flex items-center text-gray-700'><span className="inline-block w-1 h-1 bg-[#1A183E] rounded mr-2"></span>40% = 72,000</li>
+                        <li className='flex items-center text-gray-700'><span className="inline-block w-1 h-1 bg-[#1A183E] rounded mr-2"></span>30% = 54,000</li>
+                        <li className='flex items-center text-gray-700'><span className="inline-block w-1 h-1 bg-[#1A183E] rounded mr-2"></span>30% = 54,000</li>
                       </ul>
                     </div>
                   </Label>
                 </RadioGroup>
+                <div className="w-full flex flex-col gap-4 px-10">
+                  <div className="w-full text-center">
+                    <label htmlFor="search" className="text-xl font-medium text-[#1A183E] w-full text-center">
+                      Enter coupon 
+                    </label>
+                  </div>
+                  <div className="relative flex gap-3 items-center">
+                    <input
+                      type="search"
+                      id="search"
+                      className="block grow px-3 py-3 text-sm text-gray-900 border border-gray-200 rounded-md bg-gray-50"
+                      placeholder="Your code here"
+                      value={coupon}
+                      onChange={(e) => {
+                        setCoupon(e.target.value);
+                        setDiscount(null);
+                      }}
+                      required
+                    />
+                    {discount ? (
+                      <CheckCircleIcon className="text-green-500 w-8 h-8 shrink-0" />
+                    ) : (
+                      <button
+                        type="submit"
+                        style={{ backgroundColor: secondaryColor }}
+                        className="text-white shrink focus:outline-none font-medium rounded-lg text-xl py-3 px-4"
+                        onClick={validateCoupon}
+                      >
+                        APPLY
+                      </button>
+                    )}
+                  </div>
+                  {error && (
+                    <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                      <span className="font-medium">Oh, snapp!</span> {error}
+                    </p>
+                  )}
+                  {isCouponSuccessful && (
+                    <p className="text-sm text-center w-full mt-8 text-gray-600">Excellent! Your coupon code has been successfully applied </p>
+                  )}
+                </div>
                 <Button style={{ backgroundColor: secondaryColor }} className="w-full" onClick={() => initiateCoursePayment(params.id)}>
                   {loading ? "Loading..." : "Proceed"}
                 </Button>
@@ -310,7 +348,7 @@ function onApprove(data) {
                 </PayPalScriptProvider>
 
                 
-                <Collapsible className="flex flex-col items-center gap-6 w-full">
+                {/* <Collapsible className="flex flex-col items-center gap-6 w-full">
                   <CollapsibleTrigger>Have a code?</CollapsibleTrigger>
                   <CollapsibleContent className="w-full">
                     <div className="w-full">
@@ -353,7 +391,7 @@ function onApprove(data) {
                       )}
                     </div>
                   </CollapsibleContent>
-                </Collapsible>
+                </Collapsible> */}
               </div>
             </section>
           </div>
