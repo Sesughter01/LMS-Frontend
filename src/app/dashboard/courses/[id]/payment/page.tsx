@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { FaPaypal } from 'react-icons/fa';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import SideBar from "@/components/SideBar";
 import DashNav from "@/components/DashNav";
 import { Book, BookmarkIcon, Clock10Icon } from "lucide-react";
@@ -27,6 +29,11 @@ import Loader from "./container/loader";
 const paymentOption = {
   FULL: "full",
   PARTIAL: "partial",
+};
+
+const initialOptions = {
+  "client-id": "YOUR_PAYPAL_CLIENT_ID", // Replace with your actual PayPal client ID
+  currency: "USD",
 };
 
 const Page = () => {
@@ -106,6 +113,44 @@ const Page = () => {
       setIsCouponSuccessful(false);
     }
   };
+
+    function createOrder() {
+    return fetch("/my-server/create-paypal-order", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        // use the "body" param to optionally pass additional order information
+        // like product ids and quantities
+        body: JSON.stringify({
+            cart: [
+                {
+                    id: "YOUR_PRODUCT_ID",
+                    quantity: "YOUR_PRODUCT_QUANTITY",
+                },
+            ],
+        }),
+    })
+        .then((response) => response.json())
+        .then((order) => order.id);
+}
+function onApprove(data) {
+      return fetch("/my-server/capture-paypal-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderID: data.orderID
+        })
+      })
+      .then((response) => response.json())
+      .then((orderData) => {
+            const name = orderData.payer.name.given_name;
+            alert(`Transaction completed by ${name}`);
+      });
+
+    }
 
   useEffect(() => {
     fetchThisCourse(params.id);
@@ -236,6 +281,35 @@ const Page = () => {
                 <Button style={{ backgroundColor: secondaryColor }} className="w-full" onClick={() => initiateCoursePayment(params.id)}>
                   {loading ? "Loading..." : "Proceed"}
                 </Button>
+                   {/* <Button 
+                      style={{ 
+                        backgroundColor: 'transparent', 
+                        borderColor: secondaryColor, 
+                        borderWidth: '1px', 
+                        borderStyle: 'solid' 
+                      }} 
+                      className="w-full flex items-center justify-center space-x-2 text-black" 
+                      onClick={() => initiateCoursePayment(params.id)}
+                    >
+                      {loading ? "Loading..." : (
+                        <>
+                          
+                          <span>Proceed with</span>
+                          <FaPaypal />
+                        </>
+                      )}
+                </Button> */}
+                <PayPalScriptProvider options={{ clientId: "test" }}>
+                   <div className="w-full">
+                      <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                      />
+
+                   </div>
+                </PayPalScriptProvider>
+
+                
                 <Collapsible className="flex flex-col items-center gap-6 w-full">
                   <CollapsibleTrigger>Have a code?</CollapsibleTrigger>
                   <CollapsibleContent className="w-full">

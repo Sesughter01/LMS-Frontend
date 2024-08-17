@@ -521,7 +521,7 @@ const Step2: React.FC<Step2Props> = ({
                     >
                       <option value="">Select Option</option>
                       <option value={"Self-Employed"}>Self Employed</option>
-                      <option value={"UnEmployed"}>UnEmployed</option>
+                      <option value={"UnEmployed"}>Unemployed</option>
                       <option value={"employed"}>Employed</option>
                     </select>
                   ) : (

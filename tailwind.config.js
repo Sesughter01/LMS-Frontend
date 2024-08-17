@@ -21,6 +21,7 @@ module.exports = {
       },
       colors: {
         border: "var(--border)",
+        customDarkBlue: '#1D1E40',
         menu: "#1A183E",
         input: "var(--input)",
         ring: "var(--ring)",
@@ -55,6 +56,9 @@ module.exports = {
           foreground: "var(--card-foreground)",
         },
       },
+      scrollbar: {
+        width: '5px', // Custom scrollbar width
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -82,5 +86,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("tailwind-scrollbar")({ nocompatible: true }),
+    require("tailwind-scrollbar-hide"),
+  ],
 };

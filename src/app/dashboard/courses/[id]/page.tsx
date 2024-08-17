@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import SideBar from "@/components/SideBar";
 import DashNav from "@/components/DashNav";
 
+import { RootState } from "@/store/store";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import Image from "next/image";
@@ -22,7 +24,7 @@ import { toast } from "react-toastify";
 import { extractErrorMessage } from "@/shared/utils/helper";
 import { Course, CourseDetail, courseOverview } from "@/shared/types/course";
 import { useRouter } from "next/navigation";
-
+import { useSelector } from "react-redux";
 import javaCourseImage from "@/assets/courses/cybersecurity.png";
 import linuxCourseImage from "@/assets/courses/linux.png";
 import pythonCourseImage from "@/assets/courses/python.png";
@@ -82,13 +84,32 @@ const Page = () => {
   const [overview, setOverview] = useState<courseOverview | null>();
 
   const logoUrl = sessionStorage.getItem("logoUrl") || "";
+  const userCourseId = sessionStorage.getItem("userCourseId") || "";
   const secondaryColor = sessionStorage.getItem("secondaryColor") || "";
+  const [userCourseEnrolledId, setUserCourseEnrolledId] = useState<any[]>([]);
+  const authUser = useSelector((state: RootState) => state.auth.user);
+  const enrolledCourseIds = userCourseEnrolledId?.map(course => course.courseId);
+
+  console.log("TEST", enrolledCourseIds?.includes(Number(params.id)) )
+
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  console.log("ENROLLED",isEnrolled)
+  console.log("ENROLLED IDDS",enrolledCourseIds)
+  console.log("iDS",userCourseEnrolledId)
+
 
   const fetchThisCourse = async (courseId: any) => {
     try {
       const response = await courseService.GetIndividualCourseDetails(courseId);
       console.log("INDIVIDUAL COURSE",response)
+      console.log("AUTH USER",authUser)
+     
       setDetails(response);
+          // Check if the user is enrolled in this course
+          // if (authUser && response.IsUserEnrolled) {
+          //   setIsEnrolled(true);
+          // }
+         
     } catch (err) {
       console.log("ERROR",err)
       router.push("/not-found");
@@ -107,17 +128,56 @@ const Page = () => {
     }
   };
 
+    const fetchUserEnrolledCourses = async () => {
+    try{
+        const userCourseId = sessionStorage.getItem("userCourseId")
+        if(authUser && !userCourseId){
+          toast.info("User has no current course")
+          // setUserCourseEnrolledId(0);
+        }else{
+        
+          let userEnrolledCourseIdS = await courseService.GetIndividualUserCourseId(authUser.id);
+          
+          console.log("Users Enrolled Id", userEnrolledCourseIdS )
+          // console.log("Users Enrolled Id", userEnrolledCourseId)
+          // console.log("Users Enrolled Ids", enrolledCourseIds )
+          console.log("paramId", params.id )
+          console.log("TEST", enrolledCourseIds?.includes(Number(params.id)) )
+          setUserCourseEnrolledId(userEnrolledCourseIdS)
+          // if (enrolledCourseIds?.includes(Number(params.id))) {
+          //   setIsEnrolled(true);
+          // }
+         
+          console.log("ENROLLED",isEnrolled)
+          console.log("ENROLLED idds",enrolledCourseIds)
+          if (enrolledCourseIds.includes(params.id)) {
+            setIsEnrolled(true);
+          }
+          // setCourses([courses]);
+          // setUserCourses(courses);
+          // setUserCourses([courses]);
+        }
+        
+    }catch(err){
+      toast.error(err.message)
+        // console.log('errorr', err)
+    }
+  };
+
   useEffect(() => {
     fetchThisCourse(params.id);
     fetchThisCourseOverview(params.id);
+    
+    fetchUserEnrolledCourses();
+    console.log("Course Details", details);
   }, []);
 
-  console.log("Course Details", details);
+  // console.log("Course Details", details);
 
-  useEffect(() => {
-    fetchThisCourse(params.id);
-    fetchThisCourseOverview(params.id);
-  }, []);
+  // useEffect(() => {
+  //   fetchThisCourse(params.id);
+  //   fetchThisCourseOverview(params.id);
+  // }, []);
 
   const getCourseImage = (course: any) => {
     let courseImageSelection: any = coursesImagesDict.java;
@@ -188,7 +248,7 @@ const Page = () => {
   });
 
   return (
-    <section className="flex w-full min-h-screen h-auto">
+        <section className="flex w-full min-h-screen h-auto">
       <SideBar logoUrl={logoUrl} secondaryColor={secondaryColor} />
       <main className="grow shrink-0 w-full lg:max-w-[77%] flex flex-col gap-6">
         {/* <DashNav secondaryColor={secondaryColor} currentPage={"Courses"} /> */}
@@ -232,14 +292,23 @@ const Page = () => {
                   />
                 </div>
               </div>
-              {/* {details.isOpenForEnrollment && (
+              {details.isOpenForEnrollment && !enrolledCourseIds?.includes(Number(params.id)) ? (
                 <div className="flex justify-end items-center gap-6 px-6">
                   <Button className="bg-blue-500" asChild>
                     <Link href={pathname + "/payment"}>Enroll Now</Link>
                   </Button>
                   <p className="text-xl font-bold">N{details.coursePrice}</p>
                 </div>
-              )} */}
+              ):(
+            
+                <div className="flex flex-col justify-end items-end gap-2 px-6">
+                  <p>Already enrolled</p>
+                <Button className="bg-blue-500" asChild>
+                  <Link href={pathname + "/learn"}>Go to Course</Link>
+                </Button>
+                {/* <p className="text-xl font-bold">N{details.coursePrice}</p> */}
+              </div> 
+              )} 
             </section>
 
             <section className="grow px-4 lg:px-8 flex gap-8">
@@ -278,7 +347,7 @@ const Page = () => {
                     </TabsTrigger>
                     
                   </TabsList>
-                    {details.isOpenForEnrollment && (
+                    {/* {details.isOpenForEnrollment && !isEnrolled && (
                       <div className="flex justify-right  items-center gap-6 px-6">
                         <Button className="bg-blue-500 w-full" asChild>
                           <Link href={pathname + "/payment"}>Enroll Now</Link>
@@ -288,7 +357,7 @@ const Page = () => {
                           N{details.coursePrice}
                         </p>
                       </div>
-                    )}
+                    )} */}
                 </div>
 
                 <TabsContent value="about">

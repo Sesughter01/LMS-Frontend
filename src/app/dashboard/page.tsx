@@ -62,10 +62,21 @@ import courseService from "@/services/api/courses";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import { motion, AnimatePresence } from "framer-motion";
+// import CourseCard from "@/components/CourseCard";
+import UserCourseCard from "@/components/UserCourseCard";
+import LeaderBoardCard from "@/components/LeaderBoardCard";
+import { Announcement } from "@/shared/types/announcement";
+import { FetchStudentAssessmentProgress } from '@/store/slices/studentSlice';
+import DashboardService from "@/services/api/dashboard";
 
-type size = number
 
-export const CircularProgress = ({ size, progress , strokeWidth }) => {
+type size = number;
+// 
+export const CircularProgress = ({size ,progress,strokeWidth } : {
+    size: number;
+    progress: number;
+    strokeWidth: number;
+  }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (progress / 100) * circumference;
@@ -119,11 +130,28 @@ export const CircularProgress = ({ size, progress , strokeWidth }) => {
   );
 };
 
+const fadeInAnimationVariants = {
+  initial: { y: 100, opacity: 0 },
+  animate: (index: number) => ({
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.25, ease: "easeInOut", delay: index * 0.05 },
+  }),
+  exit: (index: number) => ({
+    y: 100,
+    opacity: 0,
+    transition: { duration: 0.25, ease: "easeInOut", delay: index * 0.05 },
+  }),
+};
+
 const Page = () => {
-  const [progress, setProgress] = useState(1); // Example progress value
-  const authUser = useSelector((state: RootState) => state.auth.user);
+  const [progress, setProgress] = useState(0); // Example progress value
+  const authUser = useSelector((state: RootState) => state.auth.user); const dispatch = useDispatch();
+  const { studentAssessmentProgress, status, error } = useSelector((state: RootState) => state.student);
+  
 
   // console.log("Authsuser********", authUser)
+  console.log("STUDENT: ",  studentAssessmentProgress)
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -153,9 +181,24 @@ const Page = () => {
   const [changeCourseState, setChangeCourseState] = useState(false);
     const [cohortStartDate, setCohortStartDate] = useState<null | string>(null);
     const [modalOpen, setModalOpen] = useState(false)
+  const [userCourses, setUserCourses] = useState<Course[]>();
+  const [totalCourseModules, setTotalCourseModules] = useState<number>(0);
+  const [totalCourseAssessments, setTotalCourseAssessments] = useState<number>(0);
 
   console.log("recentApplication:", mostRecentApplication);
   console.log("id:", cohortPreAssessment);
+  const [announcementsData, setAnnouncementsData] = useState<Announcement[]>([]);
+
+  const enrolledCourseIds = userCourses?.map(course => course.id);
+
+  const formatTime = (createdAt: string) => {
+    const date = new Date(createdAt);
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+    return `${formattedHours}:${minutes} ${ampm}`;
+  };
 
   const router = useRouter();
 
@@ -219,8 +262,35 @@ const Page = () => {
         mostRecentApplication?.cohortId
       );
 
-      console.log("coursesssssssssssssssss", courses)
-      setAvailableCourses(courses.results);
+      console.log("coursesssssssssssssssss", courses);
+      setAvailableCourses(courses.results );
+    }
+  };
+
+
+  const fetchUserCourses = async () => {
+    try{
+        const userCourseId = sessionStorage.getItem("userCourseId")
+        if(!userCourseId){
+          toast.info("User has no current course")
+          setUserCourses([]);
+        }else{
+          // let courses = await courseService.GetAllAvailableCoursesInProgramme(defaultProgramme?.id, mostRecentApplication?.cohortId);
+        // console.log("couresewwwwwwwwwwwwwwwwwww", courses.results)
+          let courses = await courseService.GetIndividualCourseDetails(Number(userCourseId));
+
+          console.log("mineeeeeeeeeeeeee", courses)
+
+          // setCourses([courses]);
+          setUserCourses([courses]);
+          setTotalCourseModules(courses.modules)
+          setTotalCourseAssessments(courses.assessments)
+          // setUserCourses([courses]);
+        }
+        
+    }catch(err){
+      toast.error(err.message)
+        console.log('errorr', err)
     }
   };
 
@@ -332,7 +402,8 @@ const Page = () => {
 
   useEffect(() => {
     fetchAndSetMostRecentApplication();
-  }, []);
+    fetchUserCourses();
+  }, [authUser]);
 
   useEffect(() => {
     fetchPreAssessmentForUserCohortAndCourse();
@@ -354,6 +425,54 @@ const Page = () => {
       updateAppliedCourseOnApplication();
     }
   }, [changeCourseState]);
+
+    useEffect(() => {
+    if (authUser?.id) {
+      dispatch(FetchStudentAssessmentProgress(authUser.id));
+    }
+  }, [dispatch, authUser?.id]);
+
+  useEffect(() => {
+    if (studentAssessmentProgress) {
+      setProgress(studentAssessmentProgress?.progress || 0);
+    }
+  }, [studentAssessmentProgress]);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const announcementsData = await DashboardService.getAnnouncements();
+        setAnnouncementsData(announcementsData as any);
+        console.log("STUDENTannouncementsData",announcementsData );
+      } catch (error) {
+        console.error("Error fetching announcements:", error);
+      }
+    };
+
+    fetchAnnouncements();
+  }, []);
+
+  // useEffect(() => {
+  //   const fetchAnnouncements = async () => {
+  //     try {
+  //       const announcementsData = await DashboardService.getAnnouncements();
+  //       const enrolledCourseIds = userCourses?.map(course => course.id);
+
+  //       const filteredAnnouncements = announcementsData.filter((announcement: Announcement) =>
+  //         enrolledCourseIds.includes(announcement.courseId)
+  //       );
+
+  //       setAnnouncementsData(filteredAnnouncements);
+  //       console.log("Filtered Announcements:", filteredAnnouncements);
+  //     } catch (error) {
+  //       console.error("Error fetching announcements:", error);
+  //     }
+  //   };
+
+  //   if (userCourses.length > 0) {
+  //     fetchAnnouncements();
+  //   }
+  // }, [userCourses]);
 
   const [isBannerVisible, setIsBannerVisible] = useState(true);
 
@@ -414,20 +533,65 @@ const Page = () => {
           
           <div className="grid gap-6 px-10  mx-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Announcements */}
-            <div className="col-span-2 bg-white p-4 rounded shadow-md">
+            {/*<div className="col-span-2 bg-white p-4 rounded shadow-md">
               <h2 className="text-lg font-semibold">Announcements</h2>
               <div className="flex flex-col justify-center items-center p-2">
                 <p className="text-gray-500 text-center">No announcement yet</p>
                 <p className="text-gray-500 text-center">Check back later to see the latest announcement from Ingryd</p>
-              </div>
+              </div> */}
+            <div className="col-span-2 bg-white p-4 rounded shadow-md">
+              <h2 className="text-lg font-semibold">Announcements</h2>
+              {announcementsData ? (announcementsData
+                .filter((announcement: Announcement) =>
+                      enrolledCourseIds?.includes(announcement.courseId)
+                    )
+                 .map((announcement: any) => (
+                      <div
+                        key={announcement.id}
+                        className="bg-[#F6F6F6] rounded-lg w-full"
+                      >
+                        <div className="flex py-2 items-start justify-between px-4 pb-8">
+                          <div className="flex items-center justify-start gap-2">
+                            {/* <Image
+                              src={logoUrl}
+                              width={30}
+                              height={30}
+                              alt="Logo"
+                            /> */}
+                            <div className="flex flex-col">
+                              <span
+                                style={{ color: secondaryColor }}
+                                className="font-semibold text-[15px]"
+                              >
+                                {announcement.title}
+                              </span>
+                              <span className="text-[#808080] text-[12px] font-medium">
+                                {announcement.announcement}
+                              </span>
+                            </div>
+                          </div>
+                          <span className="text-[#808080] text-[12px] font-medium">
+                            {formatTime(announcement.createdAt)}
+                          </span>
+                        </div>
+                      </div>
+                    ))):(
+                      <div className="flex flex-col justify-center items-center p-2">
+                        <p className="text-gray-500 text-center">No announcement yet</p>
+                        <p className="text-gray-500 text-center">Check back later to see the latest announcement from Ingryd</p>
+                      </div>
+                    )}
             </div>
 
             {/* Leaderboards */}
-            <div className="row-span-3 col-span-1 bg-white p-4 rounded shadow">
-              <h2 className="text-lg font-semibold mb-2">Leaderboards</h2>
-              <div className="flex flex-col justify-center items-center p-2">
-                <p className="text-gray-600 text-center">No leaderboards yet</p>
-                <p className="text-gray-400 text-sm text-center">Complete your first assessment and check back later for the rankings</p>
+            <div className=" flex flex-col w-full row-span-3 col-span-1 bg-white p-4 rounded shadow ">
+              <h2 className="text-lg font-semibold">Leaderboards</h2>
+              <div className="max-h-[310px] h-full overflow-y-auto scrollbar scrollbar-thumb-customDarkBlue scrollbar-w-[4px] scrollbar-track-rounded-full scrollbar-thumb-rounded-full mt-2">
+                <LeaderBoardCard/>
+                {/* <div className="flex flex-col justify-center items-center p-2">
+                  <p className="text-gray-600 text-center">No leaderboards yet</p>
+                  <p className="text-gray-400 text-sm text-center">Complete your first assessment and check back later for the rankings</p>
+                </div> */}
               </div>
             </div>
 
@@ -436,7 +600,7 @@ const Page = () => {
             <div className="flex flex-col  row-span-3 bg-white p-4 rounded w-full shadow-md gap-4">
               <h2 className="text-lg font-semibold">Progress Summary</h2>
               <div className="flex items-center mt-4 gap-4">
-                {/* <CircularProgress size={100} progress={progress} strokeWidth={10} /> */}
+                <CircularProgress size={100} progress={progress} strokeWidth={10} />
                 {/* <div className="relative">
                   <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center">
                     <span className="text-xl font-semibold">0%</span>
@@ -449,15 +613,18 @@ const Page = () => {
                     <div className=" h-3 rounded" style={{ width: '5%',background:"#1A183E" }}></div>
                   </div>
                   <div className="flex justify-between text-sm text-gray-500">
-                    <span>0/0 Modules</span>
-                    <span>0%</span>
+                    {/*<span>0/0 Modules</span>
+                    <span>0%</span> */}
+                     {studentAssessmentProgress?.completedModules || 0}/
+                     {totalCourseModules || 0} Modules
                   </div>
                   
                   <div className="w-full bg-gray-200 h-3 rounded mt-1">
                     <div className="h-3 rounded" style={{ width: '5%',background:"#1A183E" }}></div>
                   </div>
                   <div className="flex justify-between text-sm text-gray-500 mt-2">
-                    <span>0/0 Assessments</span>
+                    <span>{studentAssessmentProgress?.completedModules || 0}/
+                    { totalCourseAssessments || 0}  Assessments</span>
                     <span>0%</span>
                   </div>
                 </div>
@@ -497,15 +664,49 @@ const Page = () => {
             </div>
 
             {/* Courses */}
-            <div className="row-span-3 p-6  w-full mx-auto bg-white rounded-xl shadow-md space-y-4">
+            <div className="row-span-3 p-4  w-full  bg-white rounded-xl shadow-md space-y-4 overflow-hidden ">
               <h2 className="text-xl font-semibold text-gray-900">Courses</h2>
-              <div className="flex flex-col justify-center items-center p-2">
-                <p className="text-gray-600 text-center">You are yet to enroll in a course</p>
-                <p className="text-gray-400 text-center">Discover endless learning possibilities. Enroll now, explore courses!</p>
-              </div>
-              <div className="flex justify-center">
-                <button className="mt-4 px-4 py-2 text-white rounded" style={{ background:"#1A183E" }}>See Courses</button>
-              </div>
+              {/* scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-w-2   scrollbar-thumb-customDarkBlue scrollbar-track-transparent */}
+
+             
+              <div className="max-h-[310px] h-full overflow-y-auto scrollbar scrollbar-thumb-customDarkBlue scrollbar-w-[4px] scrollbar-track-rounded-full scrollbar-thumb-rounded-full " >
+                <ul className="w-full  ">
+                  <AnimatePresence>
+                      {userCourses && userCourses.filter(item => item.IsUserEnrolled).length ? (
+                        userCourses
+                          .filter(item => item.IsUserEnrolled)
+                          .map((singleCourse, index) => (
+                            <motion.li
+                              key={index}
+                              variants={fadeInAnimationVariants}
+                              initial="initial"
+                              whileInView="animate"
+                              exit="exit"
+                              viewport={{
+                                once: true,
+                              }}
+                              custom={index}
+                              className="flex w-full h-full flex flex-col gap-3"
+                            >
+                              <UserCourseCard key={singleCourse.id} {...singleCourse} />
+                            </motion.li>
+                          ))
+                      ) : (
+                        <div className="w-full">
+                          <div className="flex flex-col justify-center items-center p-2">
+                            <p className="text-gray-600 text-center">You are yet to enroll in a course</p>
+                            <p className="text-gray-400 text-center">Discover endless learning possibilities. Enroll now, explore courses!</p>
+                          </div>
+                          <div className="flex justify-center">
+                            <button className="mt-4 px-4 py-2 text-white rounded" style={{ background:"#1A183E" }}>See Courses</button>
+                          </div>
+                        </div>
+
+                        
+                      )}
+                    </AnimatePresence>
+                </ul>
+              </div> 
             </div>
 
             {/* Upcoming Assessment */}
@@ -549,5 +750,7 @@ export const AssessmentLoader = () => {
     </div>
   );
 };
+
+
 
 export default Page;

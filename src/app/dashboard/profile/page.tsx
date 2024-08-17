@@ -4,7 +4,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import {
-  updateUserProfile,
+  // updateUserProfile,
   updateUserAvatar,
   updateUser,
 } from "@/store/slices/authSlice";
@@ -134,8 +134,8 @@ const Page = () => {
                     },
                   }
                 : {}),
-              ...(identificationUrl
-                ? { identificationUrl: [identificationUrl] }
+              ...(identificationFile
+                ? { identificationFile: [identificationFile] }
                 : {}),
               // ...(ssceCertificateUrl ? { ssceCertifcate: ssceCertificateUrl } : {}),
               // ...(nyscCertificateUrl ? { nyscCertificate: nyscCertificateUrl } : {}),
