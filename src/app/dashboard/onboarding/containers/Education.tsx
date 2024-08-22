@@ -152,11 +152,11 @@ const Step3 = ({ onStageChange }: stageProp) => {
                         <section className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                             <div className="col-span-3">
                                 <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Highest Qualification <span className="text-primary">(required)</span>
+                                    Highest Qualification <span className="text-[#FF0000]">(required)</span>
                                 </label>
                                 <div className="mt-2">
                                     <Select onValueChange = {(getValue) => setCertificateObtained(getValue)} >
-                                        <SelectTrigger className="w-full border-gray-400">
+                                        <SelectTrigger className="w-full border-gray-400 h-[60px]">
                                             <SelectValue placeholder={certificateObtained? certificateObtained: "Highest Qualification"} />
                                         </SelectTrigger>
                                         <SelectContent className="bg-white border-gray-400">
@@ -175,7 +175,7 @@ const Step3 = ({ onStageChange }: stageProp) => {
 
                             <div className="col-span-3 ">
                                 <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Year of Graduation <span className="text-primary">(required)</span>
+                                    Year of Graduation <span className="text-[#FF0000]">(required)</span>
                                 </label>
                                 <div className="mt-2">
                                     <input
@@ -185,14 +185,14 @@ const Step3 = ({ onStageChange }: stageProp) => {
                                         value={yearOfGraduation}
                                         onChange={(e) => setYearOfGraduation(e.target.value)}
                                         autoComplete="address-level2"
-                                        className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full h-[60px] px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                 </div>
                             </div>
 
                             <div className="col-span-3 sm:col-start-1">
                                 <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Institution name <span className="text-primary">(required)</span>
+                                    Institution name <span className="text-[#FF0000]">(required)</span>
                                 </label>
                                 <div className="mt-2">
                                     <input
@@ -202,7 +202,7 @@ const Step3 = ({ onStageChange }: stageProp) => {
                                         value={institutionName}
                                         onChange={(e) => setInstitutionName(e.target.value)}
                                         autoComplete="address-level2"
-                                        className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full h-[60px] px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                 </div>
                             </div>
@@ -210,7 +210,7 @@ const Step3 = ({ onStageChange }: stageProp) => {
 
                             <div className="col-span-3">
                                 <label htmlFor="region" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Course of Study <span className="text-primary">(required)</span>
+                                    Course of Study <span className="text-[#FF0000]">(required)</span>
                                 </label>
                                 <div className="mt-2">
                                     <input
@@ -220,7 +220,7 @@ const Step3 = ({ onStageChange }: stageProp) => {
                                         value={courseOfStudy}
                                         onChange={(e) => setCourseOfStudy(e.target.value)}
                                         autoComplete="address-level1"
-                                        className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full h-[60px] px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                 </div>
                             </div>
@@ -231,7 +231,7 @@ const Step3 = ({ onStageChange }: stageProp) => {
                             <div className=" lg:w-1/2">
                                 <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
                                     Degree certificate
-                                     {/*<span className="text-primary">*</span>*/}
+                                     <span className="text-[#FF0000]">(required)</span>
                                 </label>
                                 <div className="mt-2 flex rounded-lg border border-dashed border-gray-900/25 py-4 px-4 flex-col gap-4 ">
 

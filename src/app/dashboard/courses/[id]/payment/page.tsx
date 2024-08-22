@@ -199,6 +199,14 @@ function onApprove(data) {
         </div>
         {details ? (
           <div className="flex flex-col gap-8">
+            {/* <div className="m-8">
+              <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.5 30L47.5 30M12.5 30L27.5 15M12.5 30L27.5 45" stroke="#1A183E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div> */}
+
+            {/* <div></div> */}
+
             <section className="flex flex-col items-center gap-8 px-6 lg:px-36 lg:mx-auto">
               <div className="flex flex-col-reverse lg:flex-row gap-2 w-full lg:w-max cursor-pointer hover:bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
                 <div className="flex flex-col gap-2 grow p-2 max-h-[221px] w-full" >
@@ -206,22 +214,22 @@ function onApprove(data) {
                     <p>{details.courseTitle}</p>
                   </div>
                   <ul className='flex flex-col gap-1 text-gray-500 text-xs list-disc pl-8'>
-                                    <li>
-                                        {details.courseDescription}
-                                    </li>
-                                    <li>
-                                        Server-Side Framework Mastery
-                                    </li>
-                                    <li>
-                                        RESTful API Creation
-                                    </li>
-                                    <li>
-                                        Database Integration Proficiency
-                                    </li>
-                                    <li>
-                                        Deployment and Scalability
-                                    </li>
-                                </ul>
+                    <li>
+                        {details.courseDescription}
+                    </li>
+                    <li>
+                        Server-Side Framework Mastery
+                    </li>
+                    <li>
+                        RESTful API Creation
+                    </li>
+                    <li>
+                        Database Integration Proficiency
+                    </li>
+                    <li>
+                        Deployment and Scalability
+                    </li>
+                  </ul>
                   <div className="flex gap-8 mt-6 text-xs">
                     <p className="flex items-center gap-1">
                       <Book className="text-primary h-4" /> 12 Lessons
@@ -300,7 +308,7 @@ function onApprove(data) {
                       <button
                         type="submit"
                         style={{ backgroundColor: secondaryColor }}
-                        className="text-white shrink focus:outline-none font-medium rounded-lg text-xl py-3 px-4"
+                        className="text-white shrink focus:outline-none font-medium rounded-lg text-xl py-2 px-4"
                         onClick={validateCoupon}
                       >
                         APPLY

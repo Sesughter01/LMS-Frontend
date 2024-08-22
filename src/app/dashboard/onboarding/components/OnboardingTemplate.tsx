@@ -39,7 +39,7 @@ const OnboardingTemplate = () => {
     <>
         <section className='flex gap-4 text-center' >
           <div className='flex flex-col gap-3 items-center cursor-pointer' onClick={() => handleStageChange(1)}>
-              <Image src={personalInfo} alt="icon" className="w-12 aspect-square" />
+              <Image src={personalInfo} alt="icon" className="w-12 aspect-circle" />
               <small className='text-blue-500 text-xs'>Personal <br />Information</small>
           </div>
           <span className='bg-[#ACACAC] h-[2px] grow rounded-full my-5'></span>

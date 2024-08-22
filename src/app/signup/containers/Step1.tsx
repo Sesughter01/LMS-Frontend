@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import styled from 'styled-components';
 
 interface Step1Props {
   onNext: () => void;
@@ -12,6 +15,29 @@ interface Step1Props {
   onLoading: (loading: boolean) => void;
   secondaryColor: any;
 }
+
+const CustomPhoneInput = styled(PhoneInput)`
+  .form-control {
+    width: 100%;
+    border: 2px solid #4A90E2;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .flag-dropdown {
+    background-color: #f0f0f0;
+  }
+
+  .selected-flag {
+    border: none;
+  }
+
+  .form-control:focus {
+    border-color: #FF4500;
+    box-shadow: 0 0 8px rgba(255, 69, 0, 0.5);
+  }
+`;
 
 const Step1: React.FC<Step1Props> = ({ onNext, onUpdate, data, onLoading, secondaryColor }) => {
   const router = useRouter();
@@ -56,6 +82,13 @@ const Step1: React.FC<Step1Props> = ({ onNext, onUpdate, data, onLoading, second
     //   // Show error message using toast
     //   toast.error("Please fill in all required fields.");
     // }
+  };
+
+  const [phone, setPhone] = useState(data.phoneNumber || "");
+
+  const handlePhoneChange = (value) => {
+    setPhone(value);
+    onUpdate("phoneNumber", value);
   };
 
   return (
@@ -124,6 +157,40 @@ const Step1: React.FC<Step1Props> = ({ onNext, onUpdate, data, onLoading, second
                     placeholder="+234"
                   />
                   {data.phoneNumber === "" && errors.phoneNumber && <div className="text-red-500 text-xs">{errors.phoneNumber}</div>}
+                </div>
+                <div className="flex flex-col gap-2">
+                  <small className="text-xs font-semibold">Phone number</small>
+                  <div className="w-full md:w-84 lg:w-90"> {/* Control width using w-64 (16rem) or lg:w-80 (20rem) */}
+
+                    <PhoneInput
+                      country={'ng'} // Default country code
+                      value={phone}
+                      onChange={handlePhoneChange}
+                      inputClass="w-[600px] border text-sm px-3 py-2 rounded-sm border-gray-300 outline-0"
+                      buttonClass="bg-white border border-gray-300 rounded-sm"
+                      containerClass="flex"
+                      dropdownClass="bg-white border border-gray-300"
+                      placeholder="Enter phone number"
+                      inputProps={{
+                        name: 'phone',
+                        required: true,
+                        autoFocus: true,
+                      }}
+                      style={{
+                        width:"100%"
+                      }}
+                  />
+                  <CustomPhoneInput
+        international
+        defaultCountry="NG"
+        value={phone}
+        onChange={handlePhoneChange}
+        placeholder="Enter phone number"
+      />
+                  </div>
+                  {phone === "" && errors.phoneNumber && (
+                    <div className="text-red-500 text-xs">{errors.phoneNumber}</div>
+                  )}
                 </div>
                 <div className="flex flex-col gap-2 ">
                   <small className="text-xs font-semibold">Gender</small>

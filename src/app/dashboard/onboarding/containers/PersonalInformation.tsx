@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronLeft, ChevronRight, ChevronsUpDown, TrashIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsUpDown} from 'lucide-react';
 import Link from 'next/link'
 import React, { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,7 @@ import educationActive from '@/assets/onboarding/education-active.svg';
 import confirmation from '@/assets/onboarding/confirmation.svg'
 import confirmationActive from '@/assets/onboarding/confirmation-active.svg';
 import { PhotoIcon } from '@heroicons/react/24/solid';
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { Checkbox } from "@/components/ui/checkbox"
 import {
     Select,
@@ -155,6 +156,7 @@ const Step1 = ({ onStageChange }: stageProp) => {
         );
         authUser?.profile?.dateOfBirth && setDateOfBirth(authUser.profile.dateOfBirth)
         authUser?.profile?.avatarImageUrl && setProfilePhotoUrl(authUser.profile.avatarImageUrl);
+        console.log("fttttttttttthd",  authUser)
     }, [authUser])
 
       const idProfilePhotoUrlRef = useRef<any>(null);
@@ -225,12 +227,13 @@ const Step1 = ({ onStageChange }: stageProp) => {
                             className="absolute inset-0 opacity-0 cursor-pointer"
                             />
 
-                            <button 
-                              className="px-4 py-2 text-white rounded" 
-                              style={{ background:"#ffffff",borderColor:"#1A183E" }}
-                              onClick={() => removeUploadedFile("idProfilePhotoUrlRef")}
-                              >
-                                Remove Photo
+                           <button 
+                                className="absolute top-2 right-0 px-2 py-1 bg-white rounded text-sm" 
+                                onClick={() => removeUploadedFile("idProfilePhotoUrlRef")}
+                                >
+                                <span className="absolute inline-flex items-center justify-center w-10 h-10 cursor-pointer hover:bg-red-200 text-xs font-bold text-foreground bg-gray-200 border-4 border-white rounded-full top-0 right-0">
+                                    <TrashIcon className="w-6 h-6" />
+                                </span>
                             </button>
                     </div>
                 </div>
@@ -244,7 +247,7 @@ const Step1 = ({ onStageChange }: stageProp) => {
                             </label>
                             <div className="mt-2">
                                 <Select value={title} onValueChange = {(getValue) => setTitle(getValue)} >
-                                    <SelectTrigger  className="w-full border-gray-400">
+                                    <SelectTrigger  className="w-full border-gray-400 h-[60px]">
                                     <SelectValue placeholder="Title" />
                                     </SelectTrigger>
                                     <SelectContent className="bg-white border-gray-400">
@@ -271,7 +274,7 @@ const Step1 = ({ onStageChange }: stageProp) => {
                                     value={dateOfBirth}
                                     onChange={(e) => setDateOfBirth(e.target.value)}
                                     max={sixteenYearsAgo} // Set the max attribute to 16 years ago
-                                    className="block w-full rounded-md border-0 py-2 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block w-full h-[60px] rounded-md border-0 py-2 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -282,7 +285,7 @@ const Step1 = ({ onStageChange }: stageProp) => {
                             </label>
                             <div className="mt-2">
                                 <Select value={gender} onValueChange = {(getValue) => setGender(getValue)}>
-                                    <SelectTrigger className="w-full border-gray-400">
+                                    <SelectTrigger className="w-full border-gray-400 h-[60px]">
                                     <SelectValue placeholder="Gender" />
                                     </SelectTrigger>
                                     <SelectContent className="bg-white border-gray-400">
@@ -357,11 +360,9 @@ const Step1 = ({ onStageChange }: stageProp) => {
 
                                 <div className="flex gap-2">
                                     <Select>
-                                        <SelectTrigger className="w-full border-0">
+                                        <SelectTrigger className="w-full border-0 p-0 gap-2">
                                             <PhotoIcon className=" h-16 w-16 text-gray-300" aria-hidden="true" />
-                                            <p className="ml-2 font-medium leading-5 text-sm text-left text-gray-600">Click to select file type, then upload PDF, JPG, PNG files only.
-                                                Max file size is 2MB</p>
-
+                                            <p className="font-medium leading-5 text-sm text-left text-gray-600">Click to select file type, then upload PDF, JPG, PNG <br/> files only. Max file size is 2MB</p>
                                         </SelectTrigger>
                                         <SelectContent className="bg-white border-gray-400">
                                             <SelectGroup>
@@ -396,7 +397,7 @@ const Step1 = ({ onStageChange }: stageProp) => {
                             </div>
                         </div>
 
-                        <Collapsible>
+                        {/* <Collapsible>
                             <CollapsibleTrigger>
                                 <Button variant="ghost" className="flex gap-3 px-0 text-lg">
                                     <span className="">Did you school in Nigeria?</span>
@@ -415,7 +416,7 @@ const Step1 = ({ onStageChange }: stageProp) => {
                                             <PhotoIcon className=" h-16 w-16 text-gray-300" aria-hidden="true" />
                                             <p className="font-medium leading-5 text-sm text-gray-600">Upload Pdf, jpg, jpeg, png files only. Max file size 2MB</p>
                                         </div>
-                                        {/* ssceCertifcate value */}
+                                        /* ssceCertifcate value 
                                         <div className="flex justify-between items-center rounded-md border border-gray-200 px-4 p-2">
                                             <input 
                                                 ref={ssceCertificateFileRef}
@@ -460,7 +461,7 @@ const Step1 = ({ onStageChange }: stageProp) => {
                                             <PhotoIcon className=" h-16 w-16 text-gray-300" aria-hidden="true" />
                                             <p className="font-medium leading-5 text-sm text-gray-600">Upload Pdf, jpg, jpeg, png files only. Max file size 2MB</p>
                                         </div>
-                                        {/* nyscCertificate value */}
+                                        nyscCertificate value *
                                         <div className="flex justify-between items-center rounded-md border border-gray-200 px-4 p-2">
                                             <input 
                                                 ref={nyscCertificateFileRef}
@@ -484,7 +485,7 @@ const Step1 = ({ onStageChange }: stageProp) => {
                                 </div>
 
                             </CollapsibleContent>
-                        </Collapsible>
+                        </Collapsible> */}
 
 
 

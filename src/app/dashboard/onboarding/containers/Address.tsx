@@ -145,7 +145,7 @@ const Step2 = ({ onStageChange }: stageProp) => {
                         <section className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                             <div className="sm:col-span-4">
                                 <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Residential address <span className="text-primary">(required)</span>
+                                    Residential address <span className="text-[#FF0000]">(required)</span>
                                 </label>
                                 <div className="mt-2">
                                     <input
@@ -155,14 +155,14 @@ const Step2 = ({ onStageChange }: stageProp) => {
                                         value={street}
                                         onChange={(e) => setStreet(e.target.value)}
                                         autoComplete="street-address"
-                                        className="block w-full px-2 rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full h-[60px] px-2 rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                 </div>
                             </div>
 
                             <div className="sm:col-span-2 ">
                                 <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
-                                    City <span className="text-primary">(required)</span>
+                                    City <span className="text-[#FF0000]">(required)</span>
                                 </label>
                                 <div className="mt-2">
                                     <input
@@ -172,7 +172,42 @@ const Step2 = ({ onStageChange }: stageProp) => {
                                         value={city}
                                         onChange={(e) => setCity(e.target.value)}
                                         autoComplete="address-level2"
-                                        className="block w-full px-2 rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full px-2 h-[60px] rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </div>
+
+                            
+
+                            <div className="sm:col-span-2">
+                                <label htmlFor="region" className="block text-sm font-medium leading-6 text-gray-900">
+                                    State of Origin <span className="text-primary">(optional)</span>
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        type="text"
+                                        name="region"
+                                        id="region"
+                                        value={state}
+                                        onChange={(e) => setState(e.target.value)}
+                                        autoComplete="address-level1"
+                                        className="block w-full px-2 h-[60px] rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="sm:col-span-2">
+                                <label htmlFor="loc-gov" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Local Government <span className="text-primary">(optional)</span>
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        type="text"
+                                        name="loc-gov"
+                                        id="loc-gov"
+                                        value={localGovernment}
+                                        onChange={(e) => setLocalGovernment(e.target.value)}
+                                        className="block w-full h-[60px] px-2 rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                 </div>
                             </div>
@@ -183,7 +218,7 @@ const Step2 = ({ onStageChange }: stageProp) => {
                                 </label>
                                 <div className="mt-2">
                                     <Select value={country} onValueChange = {(getValue) => setCountry(getValue)} >
-                                        <SelectTrigger className="w-full border-gray-400">
+                                        <SelectTrigger className="w-full border-gray-400 h-[60px]">
                                             <SelectValue placeholder="Country of Residence" />
                                         </SelectTrigger>
                                         <SelectContent className="bg-white border-gray-400">
@@ -195,39 +230,6 @@ const Step2 = ({ onStageChange }: stageProp) => {
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
-                                </div>
-                            </div>
-
-                            <div className="sm:col-span-2">
-                                <label htmlFor="region" className="block text-sm font-medium leading-6 text-gray-900">
-                                    State of Origin <span className="text-primary">(required)</span>
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        type="text"
-                                        name="region"
-                                        id="region"
-                                        value={state}
-                                        onChange={(e) => setState(e.target.value)}
-                                        autoComplete="address-level1"
-                                        className="block w-full px-2 rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="sm:col-span-2">
-                                <label htmlFor="loc-gov" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Local Government <span className="text-primary">(required)</span>
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        type="text"
-                                        name="loc-gov"
-                                        id="loc-gov"
-                                        value={localGovernment}
-                                        onChange={(e) => setLocalGovernment(e.target.value)}
-                                        className="block w-full px-2 rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    />
                                 </div>
                             </div>
 
